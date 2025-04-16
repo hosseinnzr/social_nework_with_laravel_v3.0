@@ -50,9 +50,10 @@
                 <div class="row g-3">
 
                 <div class="col-12 col-lg-6">
-                    @isset($post['post_picture'])
-                    <img class="card-img" src="/post-picture/{{$post['post_picture']}}" alt="Post">
-                    @endisset 
+                    <!-- Show post content START -->
+                    <x-show-post-content :post="$post"/>
+                    <!-- Show post content END -->
+
                     <br>
                     <ul class="nav nav-fill nav-stack small">
                     <li class="nav-item">

@@ -200,7 +200,12 @@ class PostController extends Controller
 
             $request->validate([
                 'post' => 'required',
+                'post_file' => 'required',
+            ], [
+                'post.required' => 'caption filed required',
+                'post_file.required' => 'media filed required',
             ]);
+            
 
             $inputs = $request->only([
                 'post_file',

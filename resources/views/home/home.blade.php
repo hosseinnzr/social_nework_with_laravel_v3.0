@@ -200,30 +200,10 @@
               
               <!-- Card body START -->
               <div class="card-body">
-                  @isset($post['post_picture'])
-                    <img class="card-img" src="/post-picture/{{$post['post_picture']}}" alt="Post">
-                    <br>    
-                  @endisset 
+                  <!-- Show post content START -->
+                  <x-show-post-content :post="$post"/>
+                  <!-- Show post content END -->
 
-                  @isset($post['post_video'])
-                    <div class="card-image">
-                      <div class="overflow-hidden fullscreen-video w-100">
-                        <!-- HTML video START -->
-                        <div class="player-wrapper card-img-top overflow-hidden">
-                          <video 
-                              class="player-html" 
-                              controls 
-                              poster="video-cover/{{$post['video_cover']}}" 
-                              style="max-height: 80vh; width: 100%; height: auto;"  
-                              muted
-                            >
-                              <source src="/post-video/{{$post['post_video']}}" type="video/mp4">
-                            </video>
-                        </div>
-                        <!-- HTML video END -->
-                      </div>
-                    </div>
-                  @endisset
                   <br>
                   <p class="mb-0">{{$post['post']}}</p>
                   
