@@ -79,9 +79,10 @@ class PostController extends Controller
     public function explore(Request $request){
         if(auth::check()){
 
-            $user_liked_post = likePost::where('UID', Auth::id())->pluck('post_id')->toArray();
-            // $user_saved_post = savePost::where('UID', Auth::id());
-            $liked_posts = Post::where('delete', 0)->whereIn('id', $user_liked_post)->get();
+            // $user_liked_post = likePost::where('UID', Auth::id())->pluck('post_id')->toArray();
+            $user_liked_post = likePost::where('UID', Auth::id())->pluck('post_id')->toArray(); // with out video
+            
+            $liked_posts = Post::where('delete', 0)->whereIn('id', $user_liked_post)->whereNot('post_picture', null)->get();
             $found_image_name = [];
 
             // python find_similar_faiss.py 12323423.png 5
@@ -102,11 +103,10 @@ class PostController extends Controller
             }
             
             $found_image_name = array_unique($found_image_name);
-            // dd($found_image_name);
-            $hash_tag = null;
             
-            // if(isset($request->tag)){
+            $hash_tag = null;
 
+            // if(isset($request->tag)){
 
             //     $new_users = User::all()->sortByDesc('id')->whereNotIn('id', $user_following)->whereNotIn('id', $user_follower)->where('id', '!=', $signin_user_id)->take(5);
 
@@ -127,15 +127,13 @@ class PostController extends Controller
             $find_posts = Post::where('delete', 0)->orderBy('created_at', 'desc');
 
             if (!empty($found_image_name)) {
-                $posts = $find_posts->where(function ($query) use ($found_image_name) {
+                $find_posts->where(function ($query) use ($found_image_name) {
                     foreach ($found_image_name as $name) {
                         $query->orWhere('post_picture', 'like', '%' . trim($name) . '%');
                     }
                 });
-            }else{
-                $posts = $find_posts->get();
             }
-
+            
             $find_posts = $find_posts->get();
             foreach ($find_posts as $post) {
                 $user = User::where('id', $post->UID)->select('id', 'user_name', 'profile_pic')->first();
@@ -153,7 +151,6 @@ class PostController extends Controller
                 'posts' => $find_posts,
                 'follower_user' => $follower_user,
                 'following_user' => $following_user,
-                // 'new_users' => $new_users,
             ]);    
             
         } else {

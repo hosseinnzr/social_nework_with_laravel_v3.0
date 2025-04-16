@@ -210,10 +210,15 @@
                       <div class="overflow-hidden fullscreen-video w-100">
                         <!-- HTML video START -->
                         <div class="player-wrapper card-img-top overflow-hidden">
-                          <video class="player-html" controls poster="video-cover/{{$post['video_cover']}}">
-                          {{-- <video class="player-html" controls> --}}
-                            <source src="/post-video/{{$post['post_video']}}" type="video/mp4">
-                          </video>
+                          <video 
+                              class="player-html" 
+                              controls 
+                              poster="video-cover/{{$post['video_cover']}}" 
+                              style="max-height: 80vh; width: 100%; height: auto;"  
+                              muted
+                            >
+                              <source src="/post-video/{{$post['post_video']}}" type="video/mp4">
+                            </video>
                         </div>
                         <!-- HTML video END -->
                       </div>
@@ -855,7 +860,29 @@
       </div>
     </div>
   <!-- Chat END -->
-    
+  {{-- outo play  --}}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const videos = document.querySelectorAll(".player-html");
+  
+      videos.forEach(video => {
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio === 1) {
+              video.play();
+            } else {
+              video.pause();
+            }
+          });
+        }, {
+          threshold: 1.0
+        });
+  
+        observer.observe(video);
+      });
+    });
+  </script>
+  
 @endauth
 
 @endsection    
