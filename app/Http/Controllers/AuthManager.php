@@ -112,7 +112,7 @@ class AuthManager extends Controller
             notify()->success('you are now signin');
             return redirect()->route('home');  
         }else{
-            return view('signin',[
+            return view('auth.signin',[
                 'redirect' => $request->query('r')
             ]);
         }
@@ -182,7 +182,7 @@ class AuthManager extends Controller
             notify()->success('you are now signin');
             return redirect()->route('home');  
         }else{
-            return view('signup');
+            return view('auth.signup');
         }
     }
 
@@ -203,7 +203,7 @@ class AuthManager extends Controller
         if(Auth::check()){
             return redirect()->route('home');
         }else{
-            return view('forgotPassword');
+            return view('auth.forgotPassword');
         }
     } 
 
