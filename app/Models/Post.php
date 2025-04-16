@@ -27,5 +27,6 @@ class Post extends Model
         'post_picture',
         'post_number',
         'post_video',
+        'video_cover',
         ];
 }

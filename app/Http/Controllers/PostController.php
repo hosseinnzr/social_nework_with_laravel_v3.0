@@ -206,7 +206,7 @@ class PostController extends Controller
             ]);
 
             $inputs = $request->only([
-                'post_picture',
+                'post_file',
                 'UID',
                 'title',
                 'post',
@@ -214,8 +214,8 @@ class PostController extends Controller
             ]);
             
             // image OR video
-            if ($request->hasFile('post_picture')) {
-                $file = $request->file('post_picture');
+            if ($request->hasFile('post_file')) {
+                $file = $request->file('post_file');
                 $mimeType = $file->getMimeType();
 
                 // image
@@ -245,11 +245,38 @@ class PostController extends Controller
 
                 // video
                 elseif (str_starts_with($mimeType, 'video/')) {
+                    // ذخیره ویدیو
                     $videoName = time() . '.' . $file->getClientOriginalExtension();
                     $file->move(public_path('post-video'), $videoName);
                     $inputs['post_video'] = $videoName;
-                    $inputs['post_picture'] = null;
-                }
+                
+                    // بررسی و ذخیره thumbnail ارسالی از فرانت
+                    if ($request->has('video_thumbnail')) {
+                        $base64Image = $request->input('video_thumbnail');
+                
+                        // جدا کردن فرمت و دیتا
+                        [$type, $imageData] = explode(';', $base64Image);
+                        [$meta, $imageData] = explode(',', $imageData);
+                        $imageData = base64_decode($imageData);
+                
+                        // ساخت نام و ذخیره عکس
+                        $thumbnailName = time() . '.jpg';
+                        $thumbnailPath = public_path('video-cover/' . $thumbnailName);
+                
+                        // اطمینان از وجود پوشه
+                        if (!file_exists(public_path('video-cover'))) {
+                            mkdir(public_path('video-cover'), 0755, true);
+                        }
+                
+                        file_put_contents($thumbnailPath, $imageData);
+                
+                        // ذخیره نام عکس کاور (thumbnail) در دیتابیس
+                        $inputs['video_cover'] = $thumbnailName;  // ذخیره اسم کاور ویدیو
+                    } else {
+                        $inputs['video_cover'] = null;  // اگر هیچ کاوری نباشه
+                    }
+                }                
+                
 
                 $inputs['UID'] = Auth::id();
                 $post = Post::create($inputs);

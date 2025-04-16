@@ -40,9 +40,9 @@
                           <div class="overflow-hidden fullscreen-video w-100">
                             <!-- HTML video START -->
                             <div class="player-wrapper card-img-top overflow-hidden">
-                              <video class="player-html" controls poster="assets/images/videos/poster.jpg">
+                              <video class="player-html" controls poster="video-cover/{{$post['video_cover']}}">
                               {{-- <video class="player-html" controls> --}}
-                                <source src="/post-video/{{ $post['post_video'] }}" type="video/mp4">
+                                <source src="/post-video/{{$post['post_video']}}" type="video/mp4">
                               </video>
                             </div>
                             <!-- HTML video END -->
@@ -51,7 +51,9 @@
                       @endisset
 
                       <br>
-                      <input type="file" name="post_picture" accept="image/*,video/*">
+                      <input type="file" name="post_file" id="post_file" accept="image/*,video/*">
+                      <div id="preview"></div>
+                      <input type="hidden" name="video_thumbnail" id="video_thumbnail">
                     
                       @error('post_picture')
                       <p class="text-red-500 text-xs mt-1">{{$message}}</p>
@@ -150,6 +152,57 @@
     </div>
     <!-- Modal create Feed photo END -->
 
+    <script>
+      document.getElementById('post_file').addEventListener('change', function (e) {
+          const file = e.target.files[0];
+          const previewDiv = document.getElementById('preview');
+          previewDiv.innerHTML = ''; // پاک‌کردن قبلی‌ها
+      
+          if (!file) return;
+      
+          const fileType = file.type;
+      
+          if (fileType.startsWith('image/')) {
+              const img = document.createElement('img');
+              img.src = URL.createObjectURL(file);
+              img.style.maxWidth = '300px';
+              previewDiv.appendChild(img);
+          } else if (fileType.startsWith('video/')) {
+              const video = document.createElement('video');
+              video.src = URL.createObjectURL(file);
+              video.controls = true;
+              video.muted = true;
+              video.playsInline = true;
+              video.style.maxWidth = '300px';
+              previewDiv.appendChild(video);
+      
+              // گرفتن thumbnail
+              const canvas = document.createElement('canvas');
+              video.addEventListener('loadeddata', function () {
+                  // صبر کن تا ویدیو لود بشه
+                  setTimeout(() => {
+                      canvas.width = video.videoWidth;
+                      canvas.height = video.videoHeight;
+                      const ctx = canvas.getContext('2d');
+                      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                      const dataURL = canvas.toDataURL('image/jpeg');
+      
+                      // نمایش thumbnail
+                      const thumb = new Image();
+                      thumb.src = dataURL;
+                      thumb.style.maxWidth = '150px';
+                      previewDiv.appendChild(document.createElement('br'));
+                      previewDiv.appendChild(thumb);
+      
+                      // قرار دادن thumbnail در hidden input برای ارسال
+                      document.getElementById('video_thumbnail').value = dataURL;
+      
+                  }, 500); // نیم ثانیه صبر برای لود بهتر فریم
+              });
+          }
+      });
+      </script>
+      
 </body>
     @endauth
 @endsection

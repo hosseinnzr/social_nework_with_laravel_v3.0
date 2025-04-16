@@ -8,6 +8,7 @@
 /public/post-video/*
 /public/story-pictures/*
 /public/storage/*
+/public/video-cover/*
 
 /public/explore_algorithm/files/features.pkl
 /public/explore_algorithm/files/*.csv

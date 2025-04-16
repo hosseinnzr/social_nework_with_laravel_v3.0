@@ -210,16 +210,16 @@
                       <div class="overflow-hidden fullscreen-video w-100">
                         <!-- HTML video START -->
                         <div class="player-wrapper card-img-top overflow-hidden">
-                          <video class="player-html" controls poster="assets/images/videos/poster.jpg">
+                          <video class="player-html" controls poster="video-cover/{{$post['video_cover']}}">
                           {{-- <video class="player-html" controls> --}}
-                            <source src="/post-video/{{ $post['post_video'] }}" type="video/mp4">
+                            <source src="/post-video/{{$post['post_video']}}" type="video/mp4">
                           </video>
                         </div>
                         <!-- HTML video END -->
                       </div>
                     </div>
                   @endisset
-
+                  <br>
                   <p class="mb-0">{{$post['post']}}</p>
                   
                   @foreach(explode(",", $post['tag']) as $tag)
