@@ -1,0 +1,24 @@
+[29-Dec-2023 08:50:51 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.22. in /home/einnir/public_html/input/vendor/composer/platform_check.php on line 24
+[29-Dec-2023 08:51:43 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.22. in /home/einnir/public_html/input/vendor/composer/platform_check.php on line 24
+[29-Dec-2023 08:52:04 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.22. in /home/einnir/public_html/input/vendor/composer/platform_check.php on line 24
+[29-Dec-2023 09:21:51 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.22. in /home/einnir/public_html/input/vendor/composer/platform_check.php on line 24
+[29-Dec-2023 09:25:02 UTC] PHP Warning:  require(/home/einnir/public_html/input/public/../laravel/vendor/autoload.php): Failed to open stream: No such file or directory in /home/einnir/public_html/input/public/index.php on line 35
+[29-Dec-2023 09:25:02 UTC] PHP Warning:  require(/home/einnir/public_html/input/public/../laravel/vendor/autoload.php): Failed to open stream: No such file or directory in /home/einnir/public_html/input/public/index.php on line 35
+[29-Dec-2023 09:25:02 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/einnir/public_html/input/public/../laravel/vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/einnir/public_html/input/public/index.php:35
+Stack trace:
+#0 {main}
+  thrown in /home/einnir/public_html/input/public/index.php on line 35
+[29-Dec-2023 09:25:13 UTC] PHP Warning:  require(/home/einnir/public_html/input/public/../laravel/vendor/autoload.php): Failed to open stream: No such file or directory in /home/einnir/public_html/input/public/index.php on line 35
+[29-Dec-2023 09:25:13 UTC] PHP Warning:  require(/home/einnir/public_html/input/public/../laravel/vendor/autoload.php): Failed to open stream: No such file or directory in /home/einnir/public_html/input/public/index.php on line 35
+[29-Dec-2023 09:25:13 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/einnir/public_html/input/public/../laravel/vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/einnir/public_html/input/public/index.php:35
+Stack trace:
+#0 {main}
+  thrown in /home/einnir/public_html/input/public/index.php on line 35
+[29-Dec-2023 09:26:48 UTC] PHP Warning:  require(/home/einnir/public_html/input/public/vendor/autoload.php): Failed to open stream: No such file or directory in /home/einnir/public_html/input/public/index.php on line 35
+[29-Dec-2023 09:26:48 UTC] PHP Warning:  require(/home/einnir/public_html/input/public/vendor/autoload.php): Failed to open stream: No such file or directory in /home/einnir/public_html/input/public/index.php on line 35
+[29-Dec-2023 09:26:48 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/einnir/public_html/input/public/vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/einnir/public_html/input/public/index.php:35
+Stack trace:
+#0 {main}
+  thrown in /home/einnir/public_html/input/public/index.php on line 35
+[29-Dec-2023 09:27:05 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.22. in /home/einnir/public_html/input/vendor/composer/platform_check.php on line 24
+[29-Dec-2023 09:28:05 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.22. in /home/einnir/public_html/input/vendor/composer/platform_check.php on line 24
