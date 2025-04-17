@@ -57,8 +57,8 @@
                 <div class="mt-2">
                     <input wire:model="replyComment" type="text" value="sss" class="form-control form-control-sm" placeholder="reply to {{$comment['user_name']}}">
                     <div class="mt-1 d-flex gap-2 p-2">
-                        <button wire:click="saveReply" class="btn btn-sm btn-primary">reply</button>
-                        <button wire:click="cancelReply" class="btn btn-sm btn-secondary">cancel</button>
+                        <button wire:click="cancelReply" class="nav-link bg-light py-1 px-2 mb-0">cancel</button>
+                        <button wire:click="saveReply" class="nav-link bg-light py-1 px-2 mb-0">reply</button>
                     </div>
                 </div>
             @endif

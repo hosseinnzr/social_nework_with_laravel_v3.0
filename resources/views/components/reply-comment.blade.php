@@ -44,14 +44,15 @@
             </div>
 
             @php
-                $text = $comment['comment_value'];
+                use App\Models\Comments;
+                $parent_user_id = Comments::where('id', $comment['parent_id'])->value('UID');
 
-                $highlighted = preg_replace_callback('/@(\w+)/', function($matches) {
-                    return '<span style="color: rgb(0, 179, 18);">@' . $matches[1] . '</span>';
-                }, e($text));
+                use App\Models\User;
+                $parent_user_name = User::where('id', $parent_user_id)->value('user_name');
             @endphp
 
-            <p class="small mb-0" style="max-width: 30ch; word-wrap: break-word;">{!! $highlighted !!}</p>
+            <p class="small mb-0" style="max-width: 30ch; word-wrap: break-word;">
+                <a href="/user/{{$parent_user_name}}" style="color: rgb(23, 139, 0)">{{ '@' .$parent_user_name}}</a> {{$comment['comment_value']}}</p>
         </div>
 
         <ul class="nav small mt-1">
@@ -67,9 +68,9 @@
         @if ($replyingTo == $comment['id'])
             <div class="mt-2">
                 <input wire:model="replyComment" type="text" value="sss" class="form-control form-control-sm" placeholder="reply to {{$comment['user_name']}}">
-                <div class="mt-1 d-flex gap-2 p-2">
-                    <button wire:click="saveReply" class="btn btn-sm btn-primary">reply</button>
-                    <button wire:click="cancelReply" class="btn btn-sm btn-secondary">cancel</button>
+                <div class="mt-1 mb-1 d-flex gap-2 p-1">
+                    <button wire:click="cancelReply" class="nav-link bg-light py-1 px-2 mb-0">cancel</button>
+                    <button wire:click="saveReply" class="nav-link bg-light py-1 px-2 mb-0">reply</button>
                 </div>
             </div>
         @endif

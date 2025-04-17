@@ -46,15 +46,6 @@ class AddComments extends Component
 
     public function saveReply()
     {
-        // dd("$this->comment");
-        if (!$this->replyingTo || $this->replyComment == '') return;
-
-        $parentComment = $this->post_comments->where('id', $this->replyingTo)->first();
-
-        if ($parentComment) {
-            $this->replyComment = '@' . $parentComment['user_name'] . ' ' . $this->replyComment;
-        }
-
         comments::create([
             'UID' => Auth::id(),
             'post_id' => $this->postId,
