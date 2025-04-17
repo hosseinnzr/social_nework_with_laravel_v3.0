@@ -22,6 +22,7 @@ class comments extends Model
         'UID',
         'user_name',
         'user_profile',
-        'isDeleted'
+        'isDeleted',
+        'parent_id'
     ];
 }
