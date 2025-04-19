@@ -127,7 +127,7 @@
                       <div class="col-4 col-lg-4 position-relative">
 
                         <div data-bs-toggle="modal" data-bs-target="#showComments{{$post['id']}}" aria-controls="offcanvasChat">
-                          <img class="img-fluid" src='/post-picture/{{$post['post_picture']}}' alt="">
+                          <x-post-cover-in-list :post="$post"/>
                         </div>
 
                         <!-- scroll show post START -->
@@ -178,9 +178,9 @@
                                   <div class="row g-3">
 
                                     <div class="col-12 col-lg-6">
-                                      @isset($post['post_picture'])
-                                      <img class="card-img" src="/post-picture/{{$post['post_picture']}}" alt="Post">
-                                      @endisset 
+
+                                      <x-show-post-content :post="$post"/>
+
                                       <br>
                                       <ul class="nav nav-fill nav-stack small">
                                         <li class="nav-item">
@@ -282,7 +282,7 @@
                       <div class="col-4 col-lg-4 position-relative">
 
                         <div data-bs-toggle="modal" data-bs-target="#showSavePost{{$save_post['id']}}" aria-controls="offcanvasChat">
-                          <img class="img-fluid" src='/post-picture/{{$save_post['post_picture']}}' alt="">
+                          <x-post-cover-in-list :post="$save_post"/>
                         </div>
 
                             <!-- scroll show post START -->
@@ -346,9 +346,9 @@
                                       <div class="row g-3">
 
                                         <div class="col-12 col-lg-6">
-                                          @isset($save_post['post_picture'])
-                                          <img class="card-img" src="/post-picture/{{$save_post['post_picture']}}" alt="Post">
-                                          @endisset 
+
+                                          <x-show-post-content :post="$save_post"/> 
+
                                           <br>
                                           <ul class="nav nav-fill nav-stack small">
                                             <li class="nav-item">
