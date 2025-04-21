@@ -41,18 +41,19 @@ class Chat implements MessageComponentInterface {
         }
     }
     
-    
     public function onMessage(ConnectionInterface $from, $msg) {
         $data = json_decode($msg, true);
     
-        if (isset($data['type']) && $data['type'] == 'private' && isset($data['target'])) {
+        if (!isset($data['type'])) {
+            return;
+        }
+    
+        if ($data['type'] == 'private' && isset($data['target'])) {
             $targetUsername = $data['target'];
     
-            // پیدا کردن اتصال گیرنده مستقیم از userConnections
             if (isset($this->userConnections[$targetUsername])) {
                 $targetConn = $this->userConnections[$targetUsername];
     
-                // فقط به گیرنده پیام رو بفرست
                 $targetConn->send(json_encode([
                     'user' => $data['user'],
                     'message' => $data['message'],
@@ -60,10 +61,22 @@ class Chat implements MessageComponentInterface {
                 ]));
             }
     
-            // پیام رو تو دیتابیس ذخیره کنیم
             $this->saveMessage($data['user'], $data['target'], $data['message']);
+        } 
+        elseif ($data['type'] == 'typing' && isset($data['target'])) {
+            $targetUsername = $data['target'];
+    
+            if (isset($this->userConnections[$targetUsername])) {
+                $targetConn = $this->userConnections[$targetUsername];
+    
+                $targetConn->send(json_encode([
+                    'type' => 'typing',
+                    'user' => $data['user']
+                ]));
+            }
         }
     }
+    
     
     
     private function saveMessage($sender, $receiver, $body) {
