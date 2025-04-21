@@ -133,7 +133,8 @@ class AuthManager extends Controller
                 
                 $_SESSION['user'] = [
                     'id' => Auth::id(),
-                    'user_name' => Auth::user()->user_name
+                    'user_name' => Auth::user()->user_name,
+                    'profile_pic' => Auth::user()->profile_pic,
                 ];
                                 
                 notify()->success('signup successfully');

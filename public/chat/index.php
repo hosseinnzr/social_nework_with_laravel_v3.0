@@ -6,10 +6,9 @@ if (!isset($_SESSION['user'])) {
 }
 require 'db.php'; 
 
-$stmt = $pdo->prepare("SELECT user_name FROM users WHERE user_name != :username");
+$stmt = $pdo->prepare("SELECT user_name, profile_pic FROM users WHERE user_name != :username");
 $stmt->execute([':username' => $_SESSION['user']['user_name']]);
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <!DOCTYPE html>
@@ -73,18 +72,20 @@ body {
 
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
-            <a class="navbar-brand" href="user/<?php echo htmlspecialchars($_SESSION['user']['user_name']); ?>">
-                <?php echo htmlspecialchars($_SESSION['user']['user_name']); ?>
+        <div class="container">
+            <a class="navbar-brand p-1 pr-2" style="border-radius: 33px; background-color: #9199a0; display: flex; " href="user/<?php echo htmlspecialchars($_SESSION['user']['user_name']); ?>">
+                <img src="<?php echo $_SESSION['user']['profile_pic']; ?>" class="rounded-circle" width="30" height="30"> 
+                &nbsp;<?php echo htmlspecialchars($_SESSION['user']['user_name']); ?>&nbsp;
             </a>
-        <div class="ml-auto">
-            
-            <span class="navbar navbar-expand-lg navbar-dark bg-warning">
-                <a style="color: #000000;" href="/">thezoom</a>
-            </span>
+            <div class="ml-auto">
+                <a href="/">
+                <img class="light-mode-item navbar-brand-item" src="assets/images/favicon.png" alt="logo" width="40" height="40">
+                </a>
+            </div>
         </div>
     </nav>
 
-<!-- <link rel="stylesheet" href="assets/style.css"> -->
+    <!-- <link rel="stylesheet" href="assets/style.css"> -->
 
     <!-- Main -->
     <div class="container">
@@ -111,7 +112,8 @@ body {
                     <ul class="list-group" id="usersListModal">
                         <?php foreach($users as $user): ?>
                             <li class="list-group-item user-item" data-username="<?php echo htmlspecialchars($user['user_name']); ?>">
-                                <?php echo htmlspecialchars($user['user_name']); ?>
+                                <img src="<?php echo $user['profile_pic']; ?>" class="rounded-circle" width="30" height="30"> 
+                                &nbsp;<?php echo htmlspecialchars($user['user_name']); ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -124,12 +126,12 @@ body {
                 <ul class="list-group" id="usersList">
                     <?php foreach($users as $user): ?>
                         <li class="list-group-item user-item" data-username="<?php echo htmlspecialchars($user['user_name']); ?>">
-                            <?php echo htmlspecialchars($user['user_name']); ?>
+                            <img src="<?php echo $user['profile_pic']; ?>" class="rounded-circle" width="40" height="40"> 
+                            &nbsp;<?php echo htmlspecialchars($user['user_name']); ?>
                         </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
-
 
             <div class="col-md-8">
             
