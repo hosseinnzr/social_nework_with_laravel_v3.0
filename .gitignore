@@ -13,6 +13,8 @@
 /public/explore_algorithm/image_names.npy
 /public/explore_algorithm/image_index.index
 
+/public/chat/vendor
+
 /storage/*.key
 /vendor
 .env

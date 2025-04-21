@@ -1,0 +1,32 @@
+.msg-list {
+    max-height: 90vh;
+    overflow-y: scroll;
+    list-style: none;
+    padding: 0;
+}
+
+.msg-list {
+    max-height: 400px;
+    overflow-y: scroll;
+    list-style: none;
+    padding: 10px;
+}
+.msg-list li {
+    word-wrap: break-word;
+}
+.text-right {
+    text-align: right;
+    margin-left: auto;
+}
+.text-left {
+    text-align: left;
+    margin-right: auto;
+}
+
+.chat-container {
+        height: 55vh; /* ارتفاع دلخواه خودت */
+        overflow-y: auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+        background: #f9f9f9;
+    }

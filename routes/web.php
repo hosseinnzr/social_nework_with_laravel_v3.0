@@ -68,12 +68,7 @@ Route::middleware(['web', 'throttle:600,1'])->group(function () {
     
     // profile
     Route::get('/user/{user_name}', [AuthManager::class, "profile"])->name('profile');
-
-    // chat
+    
     Route::get('/chat', [ChatController::class, "index"])->name('chat');
-    Route::get('/chat/{query}', [ChatController::class, "show"])->name('user.chat');
-
-    Route::post('/chat', [ChatController::class, "makaConversation"])->name('conversation');
-
 });
 

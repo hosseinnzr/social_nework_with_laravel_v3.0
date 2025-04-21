@@ -129,6 +129,13 @@ class AuthManager extends Controller
             if(Auth::user()->status == "active"){         
                 $request->session()->regenerate();
 
+                session_start();
+                
+                $_SESSION['user'] = [
+                    'id' => Auth::id(),
+                    'user_name' => Auth::user()->user_name
+                ];
+                                
                 notify()->success('signup successfully');
 
                 $redirect = $request['redirect'];
@@ -150,32 +157,6 @@ class AuthManager extends Controller
         
         return redirect(route('signin'))->with('error', 'signin details are not valid');
     }
-
-    // public function signupPost(Request $request){ 
-
-    //     $request->validate([
-    //         'profile_pic',
-    //         'first_name' => 'required',
-    //         'last_name' => 'required',
-    //         'user_name' => 'required|unique:users',
-    //         'email' => 'required|email|unique:users',
-    //         'password' => 'required',
-    //     ]);
-
-    //     $data['first_name'] = $request->first_name;
-    //     $data['last_name'] = $request->last_name;
-    //     $data['user_name'] = $request->user_name;
-    //     $data['email'] = $request->email;
-    //     $data['password'] = Hash::make($request->password);
-    //     $data['profile_pic'] = '/default/default_profile.jpg';
-
-    //     $user = User::create($data);
-    //     if($user){
-    //         notify()->success('signup user successfully!');
-    //         return redirect(route('signin'));
-    //     }
-    //     return redirect()->back();
-    // }  #### Written by Livw Wire ####
  
     function signup(){
         if(auth::check()){
@@ -194,6 +175,9 @@ class AuthManager extends Controller
         $request->session()->regenerateToken();
 
         notify()->success('signout user successfully!');
+
+        session_start();
+        session_destroy();
          
         return redirect()->route('signin');
     }
