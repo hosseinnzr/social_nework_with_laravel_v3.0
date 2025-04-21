@@ -248,6 +248,12 @@ body {
                     return;
                 }
 
+                if (data.user !== selectedUser && data.user !== username) {
+                    // این پیام مال چت الان نیست؛ نشونش نمی‌دیم
+                    console.log("پیام از کاربر دیگه‌ای اومده:", data.user, "selectedUser:", selectedUser);
+                    return;
+                }
+
                 var isOwnMessage = (data.user === username);
                 var alignmentStyle = isOwnMessage ? "justify-content: flex-end;" : "justify-content: flex-start;";
                 var bgColor = isOwnMessage ? "#ffbf0078" : "#F1F0F0";
