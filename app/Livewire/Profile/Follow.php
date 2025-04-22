@@ -6,14 +6,16 @@ use Livewire\Component;
 use App\Models\User;
 use App\Models\notifications;
 use App\Models\followRequest;
+use App\Models\follow as follow_model;
+
+use App\Mail\notifications\followRequest as followRequestNotifications;
 use App\Mail\notifications\follow as followNotifications;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
-use App\Models\follow as follow_model;
-
 use SimpleSoftwareIO\QrCode\Facades\QrCode as QR;
+
 class Follow extends Component
 {
     public $user_id;
@@ -75,7 +77,13 @@ class Follow extends Component
             'type'=> 'follow_request',
         ]);
 
-        $user = User::where('id', $user_id);
+        $user = User::findOrFail($user_id);
+
+        // send email for follow
+        if($user['follow_request_notification'] == 1){
+            $userName = Auth::user();
+            Mail::to($user->email)->send(new followRequestNotifications($userName['user_name']));
+        }
 
         // update request number
         $user = User::findOrFail($user_id);
