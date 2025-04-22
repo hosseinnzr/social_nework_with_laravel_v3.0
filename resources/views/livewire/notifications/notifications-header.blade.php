@@ -150,7 +150,7 @@
                                 </div>
                             </li>
                             <!-- follow Notif END -->
-                        @elseif ($user_notification->type == 'story')
+                        @elseif ($user_notification->type == 'like_story')
                             <!-- follow Notif START -->
                             <li>
                                 <div style="background-color: rgba(97, 97, 97, 0.088)" class="list-group-item rounded d-flex border-0 mb-1 p-3 justify-content-between">
@@ -168,7 +168,7 @@
                                             </div>
                                             
                                             <div class="d-flex">
-                                                <a href="http://127.0.0.1:8000/story?user={{auth()->user()->user_name}}" class="btn btn-sm py-1 btn-primary me-2">view story</a>
+                                                <a href="/story?user={{auth()->user()->user_name}}" class="btn btn-sm py-1 btn-primary me-2">view story</a>
                                             </div>
                                         </div>
                                     </div>

@@ -218,6 +218,8 @@ body {
 
         // وقتی روی یک کاربر کلیک می‌کنیم
         $(document).on('click', '.user-item', function() {
+            // close modal in mobile mode
+            document.getElementById('usersModal').style.display = 'none';
             selectedUser = $(this).data('username');
             msgList.html('');
             $('#chatWith').text(selectedUser); // show user_name
