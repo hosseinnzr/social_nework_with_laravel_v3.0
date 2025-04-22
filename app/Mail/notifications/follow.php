@@ -12,14 +12,16 @@ class follow extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $userName;
-
     /**
      * Create a new message instance.
      */
+    public $userName;
+    public $APP_URL;
+
     public function __construct($userName)
     {
         $this->userName = $userName;
+        $this->APP_URL = env("APP_URL");
     }
 
     /**

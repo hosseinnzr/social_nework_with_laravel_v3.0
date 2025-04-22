@@ -51,7 +51,7 @@
       <strong>{{ $userName }}</strong> just liked your post.<br>
       Click the link below to view your post:
       <br><br>
-      <a href="http://127.0.0.1:8000/p/{{$postId}}" style="color: #4caf50; text-decoration: none;">View Post</a>
+      <a href="{{$APP_URL}}/p/{{$postId}}" style="color: #4caf50; text-decoration: none;">View Post</a>
     </div>
     <div class="footer">
       This is an automated email. Please do not reply.

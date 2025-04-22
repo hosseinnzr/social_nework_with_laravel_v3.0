@@ -52,7 +52,7 @@
       <strong>{{ $userName }}</strong> just followed you.<br>
       Click the link below to view their profile:
       <br><br>
-      <a href="http://127.0.0.1:8000/user/{{$userName}}" style="color: #4caf50; text-decoration: none;">View Profile</a>
+      <a href="{{$APP_URL}}/user/{{$userName}}" style="color: #4caf50; text-decoration: none;">View Profile</a>
     </div>
     <div class="footer">
       This is an automated email. Please do not reply.

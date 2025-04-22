@@ -14,6 +14,8 @@ class likePost extends Mailable
 
     public $userName;
     public $postId;
+    public $APP_URL;
+
     /**
      * Create a new message instance.
      */
@@ -21,6 +23,7 @@ class likePost extends Mailable
     {
         $this->userName = $userName;
         $this->postId = $postId;
+        $this->APP_URL = env("APP_URL");
     }
 
     /**

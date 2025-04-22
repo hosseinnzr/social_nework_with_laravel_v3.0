@@ -62,7 +62,7 @@
       <div class="comment-text">
         {{ $comment_text }}
       </div>
-      <a href="http://127.0.0.1:8000/post/{{$postId}}" style="color: #4caf50; text-decoration: none;">View Post</a>
+      <a href="{{$APP_URL}}/post/{{$postId}}" style="color: #4caf50; text-decoration: none;">View Post</a>
     </div>
     <div class="footer">
       This is an automated email. Please do not reply.

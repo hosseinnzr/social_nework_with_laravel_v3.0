@@ -20,12 +20,14 @@ class Comment extends Mailable
     public $userName;
     public $comment_text;
     public $postId;
+    public $APP_URL;
 
     public function __construct($userName, $comment_text, $postId)
     {
         $this->userName = $userName;
         $this->comment_text = $comment_text;
         $this->postId = $postId;
+        $this->APP_URL = env("APP_URL");
     }
 
     /**
