@@ -161,7 +161,7 @@
                     <!-- User name -->
                     <div class="col-sm-6">
                       <label class="form-label">User name</label>
-                      <input name="user_name" value="{{ Auth::user()->user_name ?? old('user_name')}}" type="text" class="form-control" placeholder="">
+                      <input disabled name="user_name" value="{{ Auth::user()->user_name ?? old('user_name')}}" type="text" class="form-control" placeholder="">
                     
                       @error('user_name')
                       <p class="text-red-500 text-xs mt-1">{{$errors->first('user_name')}}</p>
