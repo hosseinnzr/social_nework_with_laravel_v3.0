@@ -111,7 +111,7 @@
                       <a href="/story?user={{$story['user_name']}}"><img class="avatar-img rounded-circle" src="{{$story['user_profile_pic']}}" alt=""></a>
                     </div>
                     <div>
-                      <a href="/story?user={{$story['user_name']}}" class="stretched-link small fw-normal text-secondary">{{$story['user_name']}}</a>
+                      <a href="/story?user={{$story['user_name']}}" class="stretched-link small fw-normal text-secondary">{{$story['user_name'].$story['UID']}}</a>
                     </div>
                   </div>
                 @endforeach

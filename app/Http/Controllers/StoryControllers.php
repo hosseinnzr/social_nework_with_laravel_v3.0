@@ -14,10 +14,22 @@ class StoryControllers extends Controller
     public function show(Request $request){
         if(auth::check()){
             $user_following = follow::where('follower_id', Auth::id())->pluck('following_id')->toArray();
-            $storys_users_id = story::whereIn('UID', $user_following)->orderBy('id')->select('UID')->groupBy('UID')->get();
+            array_unshift($user_following, strval(auth::id()));
+            
+            $order = "CASE";
+            foreach ($user_following as $index => $uid) {
+                $order .= " WHEN UID = $uid THEN $index";
+            }
+            $order .= " END";
+
+            $storys = story::whereIn('UID', $user_following)
+                        ->select('id', 'UID')
+                        ->orderByRaw($order)
+                        ->groupBy('UID')
+                        ->get();
 
             $show_all_story = collect(); // empty collection
-            foreach($storys_users_id as $storys_user_id){
+            foreach($storys as $storys_user_id){
                 $user_storys = story::where('UID', $storys_user_id['UID'])->get();
                 $show_all_story = $show_all_story->merge($user_storys);
             }

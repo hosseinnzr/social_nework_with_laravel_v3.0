@@ -32,7 +32,19 @@ class PostController extends Controller
 
             $hash_tag = null;
 
-            $storys = story::whereIn('UID', $user_following)->orderBy('id')->select('id', 'UID')->groupBy('UID')->get();
+            $user_have_story = array_merge([strval(auth::id())], $user_following);
+
+            $order = "CASE";
+            foreach ($user_have_story as $index => $uid) {
+                $order .= " WHEN UID = $uid THEN $index";
+            }
+            $order .= " END";
+
+            $storys = story::whereIn('UID', $user_have_story)
+                        ->select('id', 'UID')
+                        ->orderByRaw($order)
+                        ->groupBy('UID')
+                        ->get();
 
             foreach ($storys as $story) {
                 $user = User::where('id', $story->UID)->select('user_name', 'profile_pic')->first();
