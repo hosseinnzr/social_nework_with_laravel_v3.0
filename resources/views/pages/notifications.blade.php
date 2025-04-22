@@ -199,7 +199,7 @@
                             </div>
                           </li>
                           <!-- follow Notif END -->
-                        @elseif ($user_notification->type == 'story')
+                        @elseif ($user_notification->type == 'like_story')
                             <!-- follow Notif START -->
                             <li class="mb-1">
                               <div
