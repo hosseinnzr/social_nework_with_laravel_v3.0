@@ -4,9 +4,13 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\comments;
+use App\Models\User;
 use App\Models\likeComment;
 use App\Models\notifications;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\notifications\Comment as commentNotifications;
+
 
 class AddComments extends Component
 {
@@ -85,6 +89,18 @@ class AddComments extends Component
                 'body' => $this->comment,
                 'type'=> 'comment',
             ]);
+
+            // send email
+            $user = User::findOrFail($this->post['UID']);
+            if($user->comment_notification == 1 && auth::id() != $this->post['UID']){
+                $userName = Auth::user();
+                Mail::to($user->email)
+                ->send(new commentNotifications(
+                    $userName['user_name'], 
+                    $this->comment, 
+                    $this->post['UID']
+                ));
+            }
         }
 
         $this->comment = '';
