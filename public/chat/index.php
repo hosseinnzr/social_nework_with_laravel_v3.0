@@ -179,7 +179,7 @@ body {
     <!-- Footer -->
     <footer class="bg-light text-center text-lg-start mt-4">
         <div class="text-center p-3" style="background-color: #f1f1f1;">
-            © <?php echo date('Y'); ?> ❤️ ساخته شده با 
+            © <?php echo date('Y'); ?>  Created By hosseinNazari
         </div>
     </footer>
 
@@ -278,7 +278,7 @@ body {
 
                 msgList.append(
                     "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
-                        "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:70%;'>" +
+                        "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:40vh;'>" +
                             "<strong>" + data.user + ":</strong><br>" +
                             contentHtml +
                             "<br><small>(" + data.created_at + ")</small>" +
@@ -395,7 +395,7 @@ body {
 
             msgList.append(
                 "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
-                    "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:70%;'>" +
+                    "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:40vh;'>" +
                         "<strong>" + username + ":</strong><br>" +
                         contentHtml +
                         "<br><small>(" + currentTime + ")</small>" +

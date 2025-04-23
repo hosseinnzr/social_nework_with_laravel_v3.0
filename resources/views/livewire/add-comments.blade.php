@@ -2,7 +2,7 @@
 <div style="width: 100%; padding: 0px"  class="offcanvas-body pt-0 custom-scrollbar">
 
     <!-- Add comment START -->
-    <div class="d-flex mb-2 pt-3">
+    <div wire:poll.visible class="d-flex mb-2 pt-3">
         <!-- Avatar -->
         <div class="avatar avatar-xs me-2">
             <a href="/user/{{auth()->user()->user_name}}"> <img class="avatar-img rounded-circle" src="{{auth()->user()->profile_pic}}" alt=""> </a>
