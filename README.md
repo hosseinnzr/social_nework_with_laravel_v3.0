@@ -1,4 +1,6 @@
 ## for use crop img
+php artisan serve --host=0.0.0.0 --port=8000    
+
 composer require intervention/image
 install gd in windows and enable extention in xammp
 composer require simplesoftwareio/simple-qrcode "~4"
