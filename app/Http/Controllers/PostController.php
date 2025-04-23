@@ -315,72 +315,104 @@ class PostController extends Controller
         }
     }
 
-    public function update(Request $request){
-
+    public function update(Request $request)
+    {
         if (isset($request->id)) {
-            
             $request->validate([
                 'post' => 'required',
             ]);
 
             $inputs = $request->only([
-                'post_picture',
-                'title',
                 'post',
+                'title',
                 'tag',
             ]);
 
-            if ($request->hasFile('post_picture')) {
-                $image = $request->file('post_picture');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $post = Post::findOrFail($request->id);
+            $oldPostPicture = $post->post_picture;
+            $oldPostVideo = $post->post_video;
+            $oldVideoCover = $post->video_cover;
 
-                // create image manager with desired driver
-                $manager = new ImageManager(new Driver());
+            // اگر فایل جدید فرستاده شده بود
+            if ($request->hasFile('post_file')) {
+                $file = $request->file('post_file');
+                $mimeType = $file->getMimeType();
 
-                // Load image using Intervention Image
-                $img = $manager->read($image);
+                // اگر عکس بود
+                if (str_starts_with($mimeType, 'image/')) {
+                    $imageName = time() . '.' . $file->getClientOriginalExtension();
+                    $manager = new ImageManager(new Driver());
+                    $img = $manager->read($file);
 
-                // Get dimensions to calculate cropping coordinates
-                $width = $img->width();
-                $height = $img->height();
-                $size = min($width, $height);
-                $x = ($width - $size) / 2;
-                $y = ($height - $size) / 2;
+                    $width = $img->width();
+                    $height = $img->height();
+                    $size = min($width, $height);
+                    $x = ($width - $size) / 2;
+                    $y = ($height - $size) / 2;
 
-                // Crop the image to a square
-                $img->crop($size, $size, $x, $y);
+                    $img->crop($size, $size, $x, $y);
+                    $img->save(public_path('post-picture/' . $imageName));
 
-                // Save the image to the public directory
-                $img->save(public_path('post-picture/' . $imageName));
+                    $inputs['post_picture'] = $imageName;
+                    $inputs['post_video'] = null;
+                    $inputs['video_cover'] = null;
 
-                $inputs['post_picture'] = $imageName;
+                    // آپدیت الگوریتم اکسپلور برای عکس جدید
+                    $pythonFilePath = public_path('explore_algorithm/create_vector_single.py') . ' ' . $imageName;
+                    $pythonExe = 'C:\\Users\\nazari\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
+                    $command = $pythonExe . ' ' . $pythonFilePath;
+                    $output = shell_exec($command);
+
+                }
+                // اگر ویدیو بود
+                elseif (str_starts_with($mimeType, 'video/')) {
+                    $videoName = time() . '.' . $file->getClientOriginalExtension();
+                    $file->move(public_path('post-video'), $videoName);
+                    $inputs['post_video'] = $videoName;
+                    $inputs['post_picture'] = null;
+
+                    // بررسی و ذخیره thumbnail ارسالی از فرانت
+                    if ($request->has('video_thumbnail')) {
+                        [$type, $imageData] = explode(';', $request->input('video_thumbnail'));
+                        [$meta, $imageData] = explode(',', $imageData);
+                        $imageData = base64_decode($imageData);
+
+                        $thumbnailName = time() . '.jpg';
+                        $thumbnailPath = public_path('video-cover/' . $thumbnailName);
+
+                        if (!file_exists(public_path('video-cover'))) {
+                            mkdir(public_path('video-cover'), 0755, true);
+                        }
+
+                        file_put_contents($thumbnailPath, $imageData);
+                        $inputs['video_cover'] = $thumbnailName;
+                    } else {
+                        $inputs['video_cover'] = null;
+                    }
+                }
             }
 
-            // Organize hash tag
-            $inputs['tag'] = substr(str_replace(',,', ',', str_replace('#', ',',str_replace(' ', '', $inputs['tag']))), 1);
+            // اگر فایل جدید نفرستاده بود ولی تگ و کپشن و ... عوض شده بود
+            else {
+                $inputs['post_picture'] = $oldPostPicture;
+                $inputs['post_video'] = $oldPostVideo;
+                $inputs['video_cover'] = $oldVideoCover;
+            }
 
+            // سازماندهی هشتگ‌ها
+            $inputs['tag'] = substr(str_replace(',,', ',', str_replace('#', ',', str_replace(' ', '', $inputs['tag']))), 1);
 
-            $post = Post::findOrFail($request->id);
             $post->update($inputs);
 
-            // update explore algorithm
-            $pythonFilePath = public_path('explore_algorithm/create_vector_single.py') . ' ' . $imageName;
-            $pythonExe = 'C:\\Users\\nazari\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
+            notify()->success('Update post successfully!');
             
-            $command = '' . $pythonExe . ' ' . $pythonFilePath . '';
-
-            $output = shell_exec($command);
-
-            notify()->success('Update post successfully!'. $output);
-
-            return redirect()
-                ->route('post', ['id' => $post->id])
-                ->with('success', true);
+            return redirect()->route('post', ['id' => $post->id])
+                            ->with('success', true);
         } else {
             return redirect()->route('/signin');
         }
-
     }
+
 
     public function delete(Request $request){
         $post = Post::findOrFail($request->id);
