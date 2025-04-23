@@ -10,7 +10,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-# Load the ResNet50 model (excluding the final fc layer)
+# Load the ResNet50 (Residual Network) model (excluding the final fc layer)
 model = models.resnet50(pretrained=True)
 model = torch.nn.Sequential(*list(model.children())[:-1])
 model.eval()
