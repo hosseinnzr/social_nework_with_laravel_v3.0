@@ -13,10 +13,8 @@ class SendPost extends Component
 {
     public $search = "";
     public $postId ;
-    public $conversation_id = "";
     public $notification = "";
     public $select_user_id = [];
-
     public $select_user_info = [];
     public $result = [];
 
@@ -27,31 +25,28 @@ class SendPost extends Component
 
         foreach($this->select_user_id as $user_id){
 
-            $post_address = Post::findOrFail($postId)->post_picture;
+            $post_info = Post::findOrFail($postId);
+            $find_user_name = User::findOrFail($user_id)['user_name'];
 
-            $find_conversation_sender_id = conversations::where('sender_id' , auth::id())->where('receiver_id' , $user_id)->get();
-            $find_conversation_receiver_id = conversations::where('receiver_id' , auth::id())->where('sender_id' , $user_id)->get();
-
-            if( !($find_conversation_sender_id->isEmpty()) ){
-                $this->conversation_id = $find_conversation_sender_id[0]->id;
-
-            }elseif( !($find_conversation_receiver_id->isEmpty()) ){
-                $this->conversation_id = $find_conversation_receiver_id[0]->id;
-            }else{
-                $createdConversation = Conversations::create([
-                    'sender_id' => auth::id(),
-                    'receiver_id' => $user_id,
-                ]); 
-
-                $this->conversation_id = $createdConversation[0];
-            }
-
-            if($this->conversation_id != ""){
+            if($post_info->post_picture != null){
                 $createdMessage = messages::create([
-                    'conversation_id' => $this->conversation_id,
-                    'sender_id' => auth()->id(),
-                    'receiver_id' => $user_id,
-                    'body' => '/post-picture/'.$post_address,
+                    'sender_id' => auth::user()->user_name,
+                    'receiver_id' => $find_user_name,
+                    'body' => '/post-picture/'.$post_info->post_picture,
+                ]);
+
+                if($createdMessage){
+                    $this->select_user_info = [];
+                    $this->select_user_id = [];
+
+                    $this->notification = 'send massage successfully';
+                    
+                }
+            }else{
+                $createdMessage = messages::create([
+                    'sender_id' => auth::user()->user_name,
+                    'receiver_id' => $find_user_name,
+                    'body' => '/post-video/'.$post_info->post_video,
                 ]);
 
                 if($createdMessage){

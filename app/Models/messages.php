@@ -14,7 +14,6 @@ class messages extends Model
     protected $fillable = [
         'sender_id',
         'receiver_id',
-        'conversation_id',
         'body',
     ];
 }

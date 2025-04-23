@@ -262,10 +262,26 @@ body {
                 var alignmentStyle = isOwnMessage ? "justify-content: flex-end;" : "justify-content: flex-start;";
                 var bgColor = isOwnMessage ? "#ffbf0078" : "#F1F0F0";
 
+                let contentHtml = "";
+
+                if (data.message.startsWith("/post-video/")) {
+                    contentHtml = 
+                        "<video controls style='max-width: 35vh; border-radius:10px;' max-height: 40vh; muted>" +
+                            "<source src='" + data.message + "' type='video/mp4'>" +
+                        "</video>";
+                } else if (data.message.startsWith("/post-picture/")) {
+                    contentHtml = 
+                        "<img src='" + data.message + "' style='max-width: 100%; max-height: 40vh; border-radius:10px;' />";
+                } else {
+                    contentHtml = data.message;
+                }
+
                 msgList.append(
                     "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
                         "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:70%;'>" +
-                            "<strong>" + data.user + ":</strong> " + data.message + "<br><small>(" + data.created_at + ")</small>" +
+                            "<strong>" + data.user + ":</strong><br>" +
+                            contentHtml +
+                            "<br><small>(" + data.created_at + ")</small>" +
                         "</div>" +
                     "</li>"
                 );
@@ -273,6 +289,7 @@ body {
                 if (!isOwnMessage) {
                     scrollToBottom();
                 }
+                scrollToBottom();
             };
 
             conn.onclose = function(e) {
@@ -362,13 +379,38 @@ body {
             var alignmentStyle = "justify-content: flex-end;";
             var bgColor = "#ffbf0078";
 
+            let contentHtml = "";
+
+            if (message.startsWith("/post-video/")) {
+                contentHtml = 
+                    "<video controls style='max-width: 35vh; border-radius:10px;' muted>" +
+                        "<source src='" + message + "' type='video/mp4'>" +
+                    "</video>";
+            } else if (message.startsWith("/post-picture/")) {
+                contentHtml = 
+                    "<img src='" + message + "' style='max-width: 100%; max-height: 60vh; border-radius:10px;' />";
+            } else {
+                contentHtml = message;
+            }
+
             msgList.append(
                 "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
                     "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:70%;'>" +
-                        "<strong>" + username + ":</strong> " + message + "<br><small>(" + currentTime + ")</small>" +
+                        "<strong>" + username + ":</strong><br>" +
+                        contentHtml +
+                        "<br><small>(" + currentTime + ")</small>" +
                     "</div>" +
                 "</li>"
             );
+
+
+            // msgList.append(
+            //     "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
+            //         "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:70%;'>" +
+            //             "<strong>" + username + ":</strong> " + message + "<br><small>(" + currentTime + ")</small>" +
+            //         "</div>" +
+            //     "</li>"
+            // );
 
             userMessage.val(''); // پاک کردن اینپوت
             scrollToBottom();

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\story;
 use App\Models\follow;
 use App\Models\likePost;
+use App\Models\hashtag;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -125,15 +126,14 @@ class PostController extends Controller
             if (isset($request->tag)) {
                 $hash_tag = $request->tag;
             
-                $new_users = User::whereNotIn('id', $following_user->pluck('id')->toArray())
-                                ->whereNotIn('id', $follower_user->pluck('id')->toArray())
-                                ->where('id', '!=', $signin_user_id)
-                                ->orderByDesc('id')
-                                ->take(5)
-                                ->get();
+                // $new_users = User::whereNotIn('id', $following_user->pluck('id')->toArray())
+                //                 ->whereNotIn('id', $follower_user->pluck('id')->toArray())
+                //                 ->where('id', '!=', $signin_user_id)
+                //                 ->orderByDesc('id')
+                //                 ->take(5)
+                //                 ->get();
             
                 $find_posts = Post::where('delete', 0)
-                            ->whereIn('id', $user_liked_post)
                             ->whereRaw("FIND_IN_SET(?, tag)", [$hash_tag])
                             ->orderBy('created_at', 'desc')
                             ->get();
@@ -219,7 +219,6 @@ class PostController extends Controller
                 'post_file.required' => 'media filed required',
             ]);
             
-
             $inputs = $request->only([
                 'post_file',
                 'UID',
@@ -304,6 +303,32 @@ class PostController extends Controller
 
                 // Organize hash tag
                 $inputs['tag'] = substr(str_replace(',,', ',', str_replace('#', ',',str_replace(' ', '', $inputs['tag']))), 1);
+
+                $tags = explode(',', $inputs['tag']); // چند تگ رو جدا می‌کنیم
+
+                foreach ($tags as $tag) {
+                    if (empty($tag)) {
+                        continue;
+                    }
+
+                    $existingTag = hashtag::where('name', $tag)->first();
+
+                    if ($existingTag) {
+                        hashtag::where('id', $existingTag->id)
+                            ->update([
+                                'number' => $existingTag->number + 1,
+                                'updated_at' => now(),
+                            ]);
+                    } else {
+                        hashtag::insert([
+                            'name' => $tag,
+                            'post_id' => '',
+                            'number' => 1,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
 
                 notify()->success('Add post successfully!');
                 
@@ -402,6 +427,32 @@ class PostController extends Controller
 
             // سازماندهی هشتگ‌ها
             $inputs['tag'] = substr(str_replace(',,', ',', str_replace('#', ',', str_replace(' ', '', $inputs['tag']))), 1);
+
+            $tags = explode(',', $inputs['tag']); // چند تگ رو جدا می‌کنیم
+
+            foreach ($tags as $tag) {
+                if (empty($tag)) {
+                    continue; // اگر خالی بود، رد شو
+                }
+
+                $existingTag = hashtag::where('name', $tag)->first();
+
+                if ($existingTag) {
+                    hashtag::where('id', $existingTag->id)
+                        ->update([
+                            'number' => $existingTag->number + 1,
+                            'updated_at' => now(),
+                        ]);
+                } else {
+                    hashtag::insert([
+                        'name' => $tag,
+                        'post_id' => '',
+                        'number' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
 
             $post->update($inputs);
 
