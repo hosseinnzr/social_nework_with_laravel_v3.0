@@ -40,7 +40,7 @@
         <!-- Show hashtag END -->
 
         @if ($posts != '[]')
-        <div class="row g-3">
+          <div class="row g-3">
                     
             @foreach ($posts as $post)
               <!-- script for open send-post modal -->

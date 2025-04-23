@@ -118,45 +118,46 @@ class PostController extends Controller
             
             $hash_tag = null;
 
-            // if(isset($request->tag)){
+            $follower_user = follow::where('following_id', Auth::id())->get();
+            $following_user = follow::where('follower_id', Auth::id())->get();
+            $signin_user_id = Auth::id();
 
-            //     $new_users = User::all()->sortByDesc('id')->whereNotIn('id', $user_following)->whereNotIn('id', $user_follower)->where('id', '!=', $signin_user_id)->take(5);
-
-            //     $posts = Post::where('delete', 0)->whereIn('id', $user_liked_post)->get();
-
-            //     $hash_tag = $request->tag;
-            //     $result = array();
-            //     foreach ($posts as $post) {
-            //         $post_array = explode(',', $post['tag']);
-            //         if ((in_array($request->tag, $post_array)) == true){
-            //             array_push($result, $post);
-            //         }
-            //         $posts=$result;
-            //     } 
-            // }
-
+            if (isset($request->tag)) {
+                $hash_tag = $request->tag;
             
-            $find_posts = Post::where('delete', 0)->orderBy('created_at', 'desc');
+                $new_users = User::whereNotIn('id', $following_user->pluck('id')->toArray())
+                                ->whereNotIn('id', $follower_user->pluck('id')->toArray())
+                                ->where('id', '!=', $signin_user_id)
+                                ->orderByDesc('id')
+                                ->take(5)
+                                ->get();
+            
+                $find_posts = Post::where('delete', 0)
+                            ->whereIn('id', $user_liked_post)
+                            ->whereRaw("FIND_IN_SET(?, tag)", [$hash_tag])
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+            }else{
 
-            if (!empty($found_image_name)) {
-                $find_posts->where(function ($query) use ($found_image_name) {
-                    foreach ($found_image_name as $name) {
-                        $query->orWhere('post_picture', 'like', '%' . trim($name) . '%');
-                    }
-                });
+                $find_posts = Post::where('delete', 0)->orderBy('created_at', 'desc');
+                
+                if (!empty($found_image_name)) {
+                    $find_posts->where(function ($query) use ($found_image_name) {
+                        foreach ($found_image_name as $name) {
+                            $query->orWhere('post_picture', 'like', '%' . trim($name) . '%');
+                        }
+                    });
+                }
+                
+                $find_posts = $find_posts->get();
             }
-            
-            $find_posts = $find_posts->get();
+
             foreach ($find_posts as $post) {
                 $user = User::where('id', $post->UID)->select('id', 'user_name', 'profile_pic')->first();
                 $post['user_id'] = $user['id'];
                 $post['user_name'] = $user['user_name'];
                 $post['user_profile_pic'] = $user['profile_pic'];
             }
-
-
-            $follower_user = follow::where('following_id', Auth::id())->get();
-            $following_user = follow::where('follower_id', Auth::id())->get();
 
             return view('pages.explore', [
                 'hash_tag' => $hash_tag,
