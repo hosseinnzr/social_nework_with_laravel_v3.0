@@ -35,9 +35,14 @@
                       <li class="dropdown-item">
                           @livewire('profile.follow', ['user_id' => $post['UID']])                        
                       </li>
+
                       <li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block {{$post['user_name']}}</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report post</a></li>
+
+                      <li>
+                        <div data-bs-toggle="modal" data-bs-target="#reportModal{{$post['id']}}" aria-controls="offcanvasChat">
+                          <a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report post</a>
+                        </div>
+                      </li>
                     </ul>
                 </div>
                 <!-- Card share action START -->
@@ -121,6 +126,27 @@
                 </div>
             </div>
             <!-- show post END -->
+
+            <!-- scroll report post modal START -->
+            <div class="modal fade" id="reportModal{{$post['id']}}" tabindex="-1" aria-hidden="true" wire:ignore>
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                  <!-- Modal feed header START -->
+                  <div class="modal-header">
+                    <h6 class="modal-title">Report Post</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <!-- Modal feed header END -->
+
+                  <!-- main START -->
+                    @livewire('report.report-post', ['relatedContentId' => $post['id']])
+                  <!-- main END -->
+                  
+                </div>
+              </div>
+            </div>
+            <!-- scroll report post modal END -->
 
         </div>
     </div>
