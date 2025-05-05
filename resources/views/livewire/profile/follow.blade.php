@@ -27,10 +27,6 @@
     @elseif ( $state == 2 )    
 
       <button wire:click="unfollow({{$user_id}})" class="btn btn-primary-soft me-2"><i class="fa fa-user"></i> unfollow</button>
-      
-      <form action="/chat" method="get" class="ms-auto me-auto mt-3">
-        <button type="submit" class="btn btn-success-soft me-2"><i class="fa bi-chat-left-text-fill"></i> message</button>
-      </form>
 
     @elseif ( $state == 3 )
 
