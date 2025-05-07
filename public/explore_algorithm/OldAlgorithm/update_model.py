@@ -9,9 +9,9 @@ import csv
 from sklearn.metrics.pairwise import cosine_similarity
 
 # مسیرها
-image_path = r"C:\Users\nazari\Documents\GitHub\social_nework_with_laravel_v2.0\public\post-picture"
-features_file = r"C:\Users\nazari\Documents\GitHub\social_nework_with_laravel_v2.0\public\explore_algorithm\files\features.pkl"
-csv_file = r"C:\Users\nazari\Documents\GitHub\social_nework_with_laravel_v2.0\public\explore_algorithm\files\sorted_images.csv"
+image_path = r"C:\Users\hossein\Documents\GitHub\social_nework_with_laravel_v2.0\public\post-picture"
+features_file = r"C:\Users\hossein\Documents\GitHub\social_nework_with_laravel_v2.0\public\explore_algorithm\files\features.pkl"
+csv_file = r"C:\Users\hossein\Documents\GitHub\social_nework_with_laravel_v2.0\public\explore_algorithm\files\sorted_images.csv"
 
 if not os.path.exists(image_path):
     raise FileNotFoundError(f"Error: The directory '{image_path}' does not exist.")

@@ -104,7 +104,7 @@ class PostController extends Controller
                 $imageName = $post->post_picture;
 
                 $pythonFilePath = public_path('explore_algorithm/find_similar.py') . ' ' . $imageName;
-                $pythonExe = 'C:\\Users\\nazari\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
+                $pythonExe = 'C:\\Users\\hossein\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
 
                 $command = '' . $pythonExe . ' ' . $pythonFilePath . ' ';
                 $output = shell_exec($command);
@@ -250,7 +250,7 @@ class PostController extends Controller
 
                     // update explore algorithm
                     $pythonFilePath = public_path('explore_algorithm/create_vector_single.py') . ' ' . $imageName;
-                    $pythonExe = 'C:\\Users\\nazari\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
+                    $pythonExe = 'C:\\Users\\hossein\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
                     
                     $command = '' . $pythonExe . ' ' . $pythonFilePath . '';
 
@@ -385,7 +385,7 @@ class PostController extends Controller
 
                     // آپدیت الگوریتم اکسپلور برای عکس جدید
                     $pythonFilePath = public_path('explore_algorithm/create_vector_single.py') . ' ' . $imageName;
-                    $pythonExe = 'C:\\Users\\nazari\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
+                    $pythonExe = 'C:\\Users\\hossein\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
                     $command = $pythonExe . ' ' . $pythonFilePath;
                     $output = shell_exec($command);
 

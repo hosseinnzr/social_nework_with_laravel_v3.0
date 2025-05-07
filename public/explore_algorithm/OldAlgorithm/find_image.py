@@ -3,7 +3,7 @@ import sys
 import os
 
 # مسیر فایل CSV مرتب‌شده
-csv_file = r"C:\Users\nazari\Documents\GitHub\social_nework_with_laravel_v2.0\public\explore_algorithm\files\sorted_images.csv"
+csv_file = r"C:\Users\hossein\Documents\GitHub\social_nework_with_laravel_v2.0\public\explore_algorithm\files\sorted_images.csv"
 
 def get_neighbors(image_name, num_neighbors=7):
     # بررسی وجود فایل CSV
