@@ -6,9 +6,42 @@ if (!isset($_SESSION['user'])) {
 }
 require 'db.php'; 
 
-$stmt = $pdo->prepare("SELECT user_name, profile_pic FROM users WHERE user_name != :username");
-$stmt->execute([':username' => $_SESSION['user']['user_name']]);
+
+$currentUserId = $_SESSION['user']['id'];
+$currentUserName = $_SESSION['user']['user_name'];
+
+$sql = "
+SELECT DISTINCT u.id, u.user_name, u.profile_pic
+FROM users u
+WHERE u.id != :currentUserId
+  AND (
+    u.id IN (
+      SELECT following_id FROM follow WHERE follower_id = :currentUserId
+    )
+    OR
+    u.id IN (
+      SELECT follower_id FROM follow WHERE following_id = :currentUserId
+    )
+    OR
+    u.user_name IN (
+      SELECT sender_id FROM messages WHERE receiver_id = :currentUserName
+      UNION
+      SELECT receiver_id FROM messages WHERE sender_id = :currentUserName
+    )
+  )
+";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute([
+  ':currentUserId' => $currentUserId,
+  ':currentUserName' => $currentUserName,
+]);
+
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// $stmt = $pdo->prepare("SELECT user_name, profile_pic FROM users WHERE user_name != :username");
+// $stmt->execute([':username' => $_SESSION['user']['user_name']]);
+// $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
