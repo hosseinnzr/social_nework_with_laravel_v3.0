@@ -447,7 +447,7 @@
   <!-- Container END -->
 </main>
 
-@if ( in_array(auth()->id(), explode(",", $user['followers'])) || $user['privacy'] == 'public')
+@if ( in_array(auth()->id(), explode(",", $user['followers'])) || $user['privacy'] == 'public' || $user['id'] == auth()->id())
   <!-- Show follower/following START -->
     <x-show-follower-following :following="$following_user" :follower="$follower_user" />
   <!-- Show follower/following END -->
