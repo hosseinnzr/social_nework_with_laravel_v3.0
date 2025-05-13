@@ -33,7 +33,7 @@ class Chat implements MessageComponentInterface {
             // ارسال پیام‌ها به فرانت‌اند
             foreach ($messages as $message) {
                 $conn->send(json_encode([
-                    'user' => $message['sender_id'],
+                    'user' => $message['sender'],
                     'message' => $message['body'],
                     'created_at' => $message['created_at']
                 ]));
@@ -81,14 +81,14 @@ class Chat implements MessageComponentInterface {
     
     private function saveMessage($sender, $receiver, $body) {
         $pdo = new \PDO('mysql:host=localhost;dbname=social_network;charset=utf8mb4', 'root', ''); // اطلاعات دیتابیس خودت رو جایگزین کن
-        $stmt = $pdo->prepare('INSERT INTO messages (body, sender_id, receiver_id, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())');
+        $stmt = $pdo->prepare('INSERT INTO messages (body, sender, receiver, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())');
         $stmt->execute([$body, $sender, $receiver]);
     }
 
     // بارگذاری پیام‌ها بین دو کاربر از دیتابیس
     private function loadMessages($sender, $receiver) {
         $pdo = new \PDO('mysql:host=localhost;dbname=social_network;charset=utf8mb4', 'root', ''); // به یاد داشته باش که اطلاعات دیتابیس خودت رو وارد کنی.
-        $stmt = $pdo->prepare('SELECT body, sender_id, created_at FROM messages WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?) ORDER BY created_at ASC');
+        $stmt = $pdo->prepare('SELECT body, sender, created_at FROM messages WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?) ORDER BY created_at ASC');
         $stmt->execute([$sender, $receiver, $receiver, $sender]);
         
         $messages = [];

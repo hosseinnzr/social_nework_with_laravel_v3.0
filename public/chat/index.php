@@ -24,9 +24,9 @@ WHERE u.id != :currentUserId
     )
     OR
     u.user_name IN (
-      SELECT sender_id FROM messages WHERE receiver_id = :currentUserName
+      SELECT sender FROM messages WHERE receiver = :currentUserName
       UNION
-      SELECT receiver_id FROM messages WHERE sender_id = :currentUserName
+      SELECT receiver FROM messages WHERE sender = :currentUserName
     )
   )
 ";
@@ -361,7 +361,7 @@ body {
                     var messages = JSON.parse(response);
 
                     for (const msg of messages) {
-                        var isOwnMessage = (msg.sender_id === username);
+                        var isOwnMessage = (msg.sender === username);
                         var alignmentStyle = isOwnMessage ? "justify-content: flex-end;" : "justify-content: flex-start;";
                         var bgColor = isOwnMessage ? "#ffbf0078" : "#F1F0F0";
 
@@ -369,7 +369,7 @@ body {
                             msgList.append(
                                 "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
                                     "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:70%;'>" +
-                                        "<strong>" + msg.sender_id + ":</strong> " + msg.body + "<br><small>(" + msg.created_at + ")</small>" +
+                                        "<strong>" + msg.sender + ":</strong> " + msg.body + "<br><small>(" + msg.created_at + ")</small>" +
                                     "</div>" +
                                 "</li>"
                             );

@@ -19,8 +19,8 @@ if (!$targetUser) {
 // گرفتن مکالمات بین دو کاربر
 $stmt = $pdo->prepare("
     SELECT * FROM messages 
-    WHERE (sender_id = :user1 AND receiver_id = :user2) 
-       OR (sender_id = :user2 AND receiver_id = :user1)
+    WHERE (sender = :user1 AND receiver = :user2) 
+       OR (sender = :user2 AND receiver = :user1)
     ORDER BY created_at ASC
 ");
 $stmt->execute([

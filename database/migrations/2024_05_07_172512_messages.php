@@ -12,8 +12,8 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->string('body');
-            $table->string('sender_id');
-            $table->string('receiver_id');
+            $table->string('sender');
+            $table->string('receiver');
             $table->timestamp('read_at')->nullable();
             $table->timestamp('sender_deleted_at')->nullable();
             $table->timestamp('receiver_deleted_at')->nullable();
