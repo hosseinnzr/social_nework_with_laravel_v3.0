@@ -20,8 +20,8 @@ class SearchBar extends Component
         if(str_contains($this->search, '#')){
             $new_search = str_replace('#', '', $this->search);
             
-            if(strlen($this->search) >= 3){
-                $hashtag_result = hashtag::where('number','>=', '1')->where('name', 'like', '%'.$new_search.'%')->get();
+            if(strlen($this->search) >= 1){
+                $hashtag_result = hashtag::where('number','>=', '1')->where('name', 'like', '%'.$new_search.'%')->limit(5)->get();
             }
         }else{
             if(strlen($this->search) >= 2){

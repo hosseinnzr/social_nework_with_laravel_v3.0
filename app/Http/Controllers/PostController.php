@@ -92,52 +92,40 @@ class PostController extends Controller
     public function explore(Request $request){
         if(auth::check()){
 
-            // $user_liked_post = likePost::where('UID', Auth::id())->pluck('post_id')->toArray();
-            $user_liked_post = likePost::where('UID', Auth::id())->pluck('post_id')->toArray(); // with out video
-            
-            $liked_posts = Post::where('delete', 0)->whereIn('id', $user_liked_post)->whereNot('post_picture', null)->get();
-            $found_image_name = [];
-
-            // python find_similar_faiss.py 12323423.png 5
-
-            foreach ($liked_posts as $post) {
-                $imageName = $post->post_picture;
-
-                $pythonFilePath = public_path('explore_algorithm/find_similar.py') . ' ' . $imageName;
-                $pythonExe = 'C:\\Users\\hossein\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
-
-                $command = '' . $pythonExe . ' ' . $pythonFilePath . ' ';
-                $output = shell_exec($command);
-
-                $clean = str_replace(["[", "]", "'"], "", $output);
-                $array = explode(", ", $clean);
-
-                $found_image_name = array_merge($found_image_name, $array);
-            }
-            
-            $found_image_name = array_unique($found_image_name);
-            
-            $hash_tag = null;
-
-            $follower_user = follow::where('following_id', Auth::id())->get();
-            $following_user = follow::where('follower_id', Auth::id())->get();
-            $signin_user_id = Auth::id();
-
             if (isset($request->tag)) {
                 $hash_tag = $request->tag;
-            
-                // $new_users = User::whereNotIn('id', $following_user->pluck('id')->toArray())
-                //                 ->whereNotIn('id', $follower_user->pluck('id')->toArray())
-                //                 ->where('id', '!=', $signin_user_id)
-                //                 ->orderByDesc('id')
-                //                 ->take(5)
-                //                 ->get();
-            
                 $find_posts = Post::where('delete', 0)
-                            ->whereRaw("FIND_IN_SET(?, tag)", [$hash_tag])
+                            ->whereRaw("FIND_IN_SET(?, tag)", [ $hash_tag])
                             ->orderBy('created_at', 'desc')
                             ->get();
             }else{
+
+                $user_liked_post = likePost::where('UID', Auth::id())->pluck('post_id')->toArray(); // with out video
+            
+                $liked_posts = Post::where('delete', 0)->whereIn('id', $user_liked_post)->whereNot('post_picture', null)->get();
+                $found_image_name = [];
+
+                // Example: python find_similar_faiss.py 12323423.png 5
+
+                // find same post for show in explor
+                foreach ($liked_posts as $post) {
+                    $imageName = $post->post_picture;
+
+                    $pythonFilePath = public_path('explore_algorithm/find_similar.py') . ' ' . $imageName;
+                    $pythonExe = 'C:\\Users\\hossein\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
+
+                    $command = '' . $pythonExe . ' ' . $pythonFilePath . ' ';
+                    $output = shell_exec($command);
+
+                    $clean = str_replace(["[", "]", "'"], "", $output);
+                    $array = explode(", ", $clean);
+
+                    $found_image_name = array_merge($found_image_name, $array);
+                }
+                
+                $found_image_name = array_unique($found_image_name);
+                
+                $hash_tag = null;
 
                 $find_posts = Post::where('delete', 0)->orderBy('created_at', 'desc');
                 
@@ -162,8 +150,6 @@ class PostController extends Controller
             return view('pages.explore', [
                 'hash_tag' => $hash_tag,
                 'posts' => $find_posts,
-                'follower_user' => $follower_user,
-                'following_user' => $following_user,
             ]);    
             
         } else {
