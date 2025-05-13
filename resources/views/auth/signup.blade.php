@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.layout')
 @section('title', "home page")
 @section('content')
     {{ csrf_field() }}

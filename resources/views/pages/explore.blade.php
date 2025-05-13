@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layouts.layout')
 @if (isset($hash_tag))
   @section('title', "explore - #$hash_tag")
 @else
