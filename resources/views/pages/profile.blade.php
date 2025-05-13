@@ -223,7 +223,9 @@
                                         <p style="width: 100%;" class="mb-0">{{$post['post']}}</p>
 
                                         @foreach(explode(",", $post['tag']) as $tag)
-                                        <a href="/explore/?tag={{$tag}}">#{{$tag}} </a>
+                                          @if ($tag != '')
+                                            <a href="/explore/?tag={{str_replace('#', '', $tag)}}">#{{$tag}} </a>
+                                          @endif
                                         @endforeach
                                         <br>
                                         <br>
@@ -389,7 +391,9 @@
                                             <p style="width: 100%;" class="mb-0">{{$save_post['post']}}</p>
 
                                             @foreach(explode(",", $save_post['tag']) as $tag)
-                                            <a href="/explore/?tag={{$tag}}">#{{$tag}} </a>
+                                              @if ($tag != '')
+                                                <a href="/explore/?tag={{str_replace('#', '', $tag)}}">#{{$tag}} </a>
+                                              @endif
                                             @endforeach
                                             <br>
                                             <br>

@@ -1,14 +1,8 @@
 @extends('layout')
-@if (isset($hash_tag))
-  @section('title', "home - #$hash_tag")
-@else
-  @section('title', 'home')  
-@endif
-
+@section('title', 'home')  
 @section('content')
 @auth
 {{ csrf_field() }}
-
 
 <main>      
   <!-- Container START -->
@@ -120,18 +114,6 @@
             </div>
           </div>
           <!-- Story END -->
-
-        <!-- Show hashtag START -->
-        @if (isset($hash_tag))
-          <div class="card card-body">
-            <ul class="nav nav-pills nav-stack small fw-normal">
-              <li class="nav-item">
-                <a class="nav-link bg-light py-1 px-2 mb-0" data-bs-toggle="modal" data-bs-target="#feedActionPhoto"> <i class="bi bi-hash text-success pe-1"></i>{{$hash_tag}}</a>
-              </li>
-            </ul>
-          </div>
-        @endif
-        <!-- Show hashtag END -->
 
         @if ($posts != '[]')
           <!-- Card feed item START -->

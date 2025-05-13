@@ -31,8 +31,6 @@ class PostController extends Controller
 
             $posts = Post::latest()->where('delete', 0)->whereIn('UID', $user_following)->get();
 
-            $hash_tag = null;
-
             $user_have_story = array_merge([strval(auth::id())], $user_following);
 
             $order = "CASE";
@@ -52,18 +50,6 @@ class PostController extends Controller
                 $story['user_name'] = $user['user_name'];
                 $story['user_profile_pic'] = $user['profile_pic'];
             }
-
-            if(isset($request->tag)){
-                $hash_tag = $request->tag;
-                $result = array();
-                foreach ($posts as $post) {
-                    $post_array = explode(',', $post['tag']);
-                    if ((in_array('#'.$request->tag, $post_array)) == true){
-                        array_push($result, $post);
-                    }
-                    $posts=$result;
-                } 
-            }
             
             foreach ($posts as $post) {
                 $user = User::where('id', $post->UID)->select('id', 'user_name', 'profile_pic')->first();
@@ -76,7 +62,6 @@ class PostController extends Controller
             $following_user = User::whereIn('id', $user_following)->select('user_name', 'first_name', 'last_name', 'profile_pic')->get();
 
             return view('home.home', [
-                'hash_tag' => $hash_tag,
                 'posts' => $posts,
                 'follower_user' => $follower_user,
                 'following_user' => $following_user,
@@ -340,6 +325,11 @@ class PostController extends Controller
                 'tag',
             ]);
 
+            // hasgtag
+            preg_match_all('/#([^#\s]+)/', $inputs['tag'], $matches);
+            $tags = implode(",", $matches[1]);
+            $tags_array = $matches[1];
+
             $post = Post::findOrFail($request->id);
             $oldPostPicture = $post->post_picture;
             $oldPostVideo = $post->post_video;
@@ -402,6 +392,8 @@ class PostController extends Controller
                         $inputs['video_cover'] = null;
                     }
                 }
+
+                $inputs['tag'] = $tags;
             }
 
             // اگر فایل جدید نفرستاده بود ولی تگ و کپشن و ... عوض شده بود
@@ -409,14 +401,11 @@ class PostController extends Controller
                 $inputs['post_picture'] = $oldPostPicture;
                 $inputs['post_video'] = $oldPostVideo;
                 $inputs['video_cover'] = $oldVideoCover;
+                $inputs['tag'] = $tags;
             }
 
-            // سازماندهی هشتگ‌ها
-            $inputs['tag'] = substr(str_replace(',,', ',', str_replace('#', ',', str_replace(' ', '', $inputs['tag']))), 1);
 
-            $tags = explode(',', $inputs['tag']); // چند تگ رو جدا می‌کنیم
-
-            foreach ($tags as $tag) {
+            foreach ($tags_array as $tag) {
                 if (empty($tag)) {
                     continue; // اگر خالی بود، رد شو
                 }
