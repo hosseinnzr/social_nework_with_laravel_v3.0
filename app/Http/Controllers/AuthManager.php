@@ -3,20 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+
+use App\Models\User;
 use App\Models\Post;
 use App\Models\savePost;
 use App\Models\follow;
 use App\Services\RequestServices;
+
 
 use Exception;
 
 class AuthManager extends Controller
 {
     protected $authService;
-    public function __construct(RequestServices $authService)
-    {
+    public function __construct(RequestServices $authService){
         $this->authService = $authService;
     }
 
@@ -84,8 +86,7 @@ class AuthManager extends Controller
 
 
     // follow request
-    public function acceptRequest(Request $request)
-    {
+    public function acceptRequest(Request $request){
         $notificationid = $request->input('notificationid');
         $userID = $request->input('userID');
 
@@ -94,9 +95,7 @@ class AuthManager extends Controller
         return redirect('notifications');
     }
 
-
-    function deleteRequest(Request $request)
-    {
+    function deleteRequest(Request $request){
         $notificationid = $request->input('notificationid');
         $userID = $request->input('userID');
 
@@ -201,6 +200,7 @@ class AuthManager extends Controller
             return redirect()->route('signin');
         }
     }
+
     public function update(Request $request){
 
         $userId = Auth::id();
@@ -225,11 +225,41 @@ class AuthManager extends Controller
             'additional_name'
         ]);
 
+        if($user['user_name'] != $input['user_name']){
+            // update session for chat
+            DB::update("
+                UPDATE messages
+                SET 
+                    sender = CASE WHEN sender = ? THEN ? ELSE sender END,
+                    receiver = CASE WHEN receiver = ? THEN ? ELSE receiver END
+                WHERE sender = ? OR receiver = ?
+            ", [
+                $user['user_name'], $input['user_name'],
+                $user['user_name'], $input['user_name'],
+                $user['user_name'], $user['user_name']
+            ]);
+
+            // update session[user_name] for chat
+            session_start();
+            $_SESSION['user'] = [
+                'id' => Auth::id(),
+                'user_name' => $input['user_name'],
+                'profile_pic' => $user['profile_pic'],
+            ];
+        }
+
         if ($request->hasFile('profile_pic')) {
             $image = ($request->file('profile_pic'));
             $imageName = time().'.'.$image->getClientOriginalExtension();
             $image->move(public_path('profile'), $imageName);
             $input['profile_pic'] = '/profile/'.$imageName;
+
+            // update session[profile_pic] for chat
+            $_SESSION['user'] = [
+                'id' => Auth::id(),
+                'user_name' => $input['user_name'],
+                'profile_pic' => $input['profile_pic'],
+            ];
         }
 
         $user->update($input);
@@ -238,6 +268,7 @@ class AuthManager extends Controller
         return redirect()->route('settings');
         
     }
+
     public function deletePost($id){
         try {
             $status = Post::where(['id' => $id]) -> delete();
