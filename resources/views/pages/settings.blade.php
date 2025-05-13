@@ -161,7 +161,7 @@
                     <!-- User name -->
                     <div class="col-sm-6">
                       <label class="form-label">User name</label>
-                      <input disabled name="user_name" value="{{ Auth::user()->user_name ?? old('user_name')}}" type="text" class="form-control" placeholder="">
+                      <input name="user_name" value="{{ Auth::user()->user_name ?? old('user_name')}}" type="text" class="form-control" placeholder="">
                     
                       @error('user_name')
                       <p class="text-red-500 text-xs mt-1">{{$errors->first('user_name')}}</p>
@@ -199,7 +199,7 @@
                     <div class="col-12">
                       <label class="form-label">Biography</label>
                       <textarea name="biography" class="form-control" rows="4" placeholder="Description (Required)">{{ Auth::user()->biography ?? old('biography')}}</textarea>
-                      <small>Character limit: 300</small>
+                      <small>Character limit: 150</small>
 
                       @error('biography')
                       <p class="text-red-500 text-xs mt-1">{{$message}}</p>
