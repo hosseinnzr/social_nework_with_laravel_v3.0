@@ -202,8 +202,13 @@ class PostController extends Controller
                 'post',
                 'tag',
             ]);
+
+            // hasgtag
+            preg_match_all('/#([^#\s]+)/', $inputs['tag'], $matches);
+            $tags = implode(",", $matches[1]);
+            $tags_array = $matches[1];
             
-            // image OR video
+            // If a new file was sent
             if ($request->hasFile('post_file')) {
                 $file = $request->file('post_file');
                 $mimeType = $file->getMimeType();
@@ -267,6 +272,8 @@ class PostController extends Controller
                     }
                 }                
                 
+                // write tag in database
+                $inputs['tag'] = $tags;
 
                 $inputs['UID'] = Auth::id();
                 $post = Post::create($inputs);
@@ -277,12 +284,8 @@ class PostController extends Controller
                 $user->post_number = $signin_user_post_number;
                 $user->save();
 
-                // Organize hash tag
-                $inputs['tag'] = substr(str_replace(',,', ',', str_replace('#', ',',str_replace(' ', '', $inputs['tag']))), 1);
-
-                $tags = explode(',', $inputs['tag']); // چند تگ رو جدا می‌کنیم
-
-                foreach ($tags as $tag) {
+                // update hashtag table
+                foreach ($tags_array as $tag) {
                     if (empty($tag)) {
                         continue;
                     }
@@ -340,12 +343,12 @@ class PostController extends Controller
             $oldPostVideo = $post->post_video;
             $oldVideoCover = $post->video_cover;
 
-            // اگر فایل جدید فرستاده شده بود
+            // If a new file was sent
             if ($request->hasFile('post_file')) {
                 $file = $request->file('post_file');
                 $mimeType = $file->getMimeType();
 
-                // اگر عکس بود
+                // image
                 if (str_starts_with($mimeType, 'image/')) {
                     $imageName = time() . '.' . $file->getClientOriginalExtension();
                     $manager = new ImageManager(new Driver());
@@ -371,7 +374,7 @@ class PostController extends Controller
                     $output = shell_exec($command);
 
                 }
-                // اگر ویدیو بود
+                // video
                 elseif (str_starts_with($mimeType, 'video/')) {
                     $videoName = time() . '.' . $file->getClientOriginalExtension();
                     $file->move(public_path('post-video'), $videoName);
@@ -398,6 +401,7 @@ class PostController extends Controller
                     }
                 }
 
+                // write tag in database
                 $inputs['tag'] = $tags;
             }
 
@@ -410,9 +414,10 @@ class PostController extends Controller
             }
 
 
+            // update hashtag table
             foreach ($tags_array as $tag) {
                 if (empty($tag)) {
-                    continue; // اگر خالی بود، رد شو
+                    continue;
                 }
 
                 $existingTag = hashtag::where('name', $tag)->first();

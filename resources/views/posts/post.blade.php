@@ -48,12 +48,13 @@
                         <input class="form-control" type="file" id="post_file" name="post_file" accept="image/*,video/*">
                       </div>
                       
-                      <div id="preview" style="padding:10px 0px"></div>
                       <input type="hidden" name="video_thumbnail" id="video_thumbnail">
                     
                       @error('post_file')
                       <p class="text-red-500 text-xs mt-1">{{$message}}</p>
                       @enderror
+
+                      <div id="preview" style="padding:10px 0px"></div>
                     </div>
 
                     <div class="mb-3 input-group-lg">
@@ -65,7 +66,13 @@
                     </div>
 
                     <div class="mb-3 input-group-lg">
-                      <input value="{{ $post['tag'] ?? old('tag')}}" placeholder="#hashtag..." type="text" class="form-control" name="tag">
+                      @if (isset($post))
+                        <input value="{{ collect(explode(',', $post['tag']))->filter()->map(fn($tag) => '#' . ltrim($tag, '#'))->implode(' ') }}" 
+                        placeholder="#hashtag..." type="text" class="form-control" name="tag">
+                      @else
+                        <input value="{{old('post')}}" placeholder="#hashtag..." type="text" class="form-control" name="tag">
+                      @endif
+                      
                     
                       @error('tag')
                       <p class="text-red-500 text-xs mt-1">{{$message}}</p>
@@ -197,7 +204,7 @@
               });
           }
       });
-      </script>
+    </script>
       
 </body>
     @endauth
