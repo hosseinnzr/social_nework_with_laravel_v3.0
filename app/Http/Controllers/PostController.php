@@ -147,10 +147,15 @@ class PostController extends Controller
             $post = post::findOrFail($id);
             $user = User::findOrFail($post->UID);
 
-            if(follow::where('follower_id',auth::id())->where('following_id', $post->UID)->exists() || $user['privacy'] == 'public' || Auth::id() == $post['UID']){
+            $check_follow = follow::where('follower_id',auth::id())->where('following_id', $post->UID)->exists();
+            $check_privacy = $user['privacy'] == 'public';
+            $check_post_UID = Auth::id() == $post['UID'];
+
+            if($check_follow || $check_privacy || $check_post_UID){
                 $post['user_id'] = $user['id'];
                 $post['user_name'] = $user['user_name'];
                 $post['user_profile_pic'] = $user['profile_pic'];
+                $post['follow_state'] = $check_follow;
 
                 return view('posts.viewPost', ['post' => $post]);
             }else{

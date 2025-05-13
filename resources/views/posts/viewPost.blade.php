@@ -32,11 +32,20 @@
                     </a>
                     <!-- Card share action dropdown menu -->
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction8">
-                      <li class="dropdown-item">
-                          @livewire('profile.follow', ['user_id' => $post['UID']])                        
-                      </li>
+                      @if ($post['follow_state'])
+                        <li>
+                          <a class="dropdown-item" href="/user/{{$post['user_name']}}"> <i class="fa fa-user"></i>&nbsp; unfollow {{$post['user_name']}}</a>
+                        </li>
+                      @else
+                        <li>
+                          <a class="dropdown-item" href="/user/{{$post['user_name']}}"> <i class="fa fa-user"></i>&nbsp; follow {{$post['user_name']}}</a>
+                        </li>
+                      @endif
+                       
 
-                      <li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block {{$post['user_name']}}</a></li>
+                      <li>
+                        <a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block {{$post['user_name']}}</a>
+                      </li>
 
                       <li>
                         <div data-bs-toggle="modal" data-bs-target="#reportModal{{$post['id']}}" aria-controls="offcanvasChat">
@@ -117,6 +126,12 @@
 
                     <div class="comments-container" style="height: 420px; overflow-y: auto;">
                     <p style="width: 100%;" class="mb-0">{{$post['post']}}</p>
+                      @foreach(explode(",", $post['tag']) as $tag)
+                        @if ($tag != '')
+                          <a href="/explore/?tag={{str_replace('#', '', $tag)}}">#{{$tag}} </a>
+                        @endif
+                      @endforeach
+                    <br>
                     <br>
                     @livewire('add-comments', ['postId' => $post['id'], 'post' => $post])
                     </div>
