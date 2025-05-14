@@ -1,6 +1,10 @@
 @props(['comment', 'post_comments', 'replyingTo'])
 
-<li class="comment-item" style="transition: all 0.3s ease;">
+@php
+    $replies = $post_comments->where('parent_id', $comment['id']);
+@endphp
+
+<li class="comment-item" style="transition: all 0.3s ease;" x-data="{ showReplies: false }">
     <div class="d-flex position-relative">
         <!-- Avatar -->
         <div class="avatar avatar-xs">
@@ -8,6 +12,7 @@
                 <img class="avatar-img rounded-circle" src="{{ asset($comment['user_profile']) }}" alt="">
             </a>
         </div>
+
         <div class="ms-2">
             <!-- Comment body -->
             <div class="bg-light rounded p-1">
@@ -24,7 +29,7 @@
                                 <button wire:click="like({{ $comment['id'] }})"><i class="bi bi-heart"></i></button>
                             @endif
                         </div>
-                        
+
                         @if ($comment['UID'] == Auth::id())
                             <div class="dropdown">
                                 <a href="#" class="text-secondary btn p-0" data-bs-toggle="dropdown" aria-expanded="false">
@@ -55,7 +60,7 @@
 
             @if ($replyingTo == $comment['id'])
                 <div class="mt-2">
-                    <input wire:model="replyComment" type="text" value="sss" class="form-control form-control-sm" placeholder="reply to {{$comment['user_name']}}">
+                    <input wire:model="replyComment" type="text" class="form-control form-control-sm" placeholder="reply to {{ $comment['user_name'] }}">
                     <div class="mt-1 d-flex gap-2 p-2">
                         <button wire:click="cancelReply" class="nav-link bg-light py-1 px-2 mb-0">cancel</button>
                         <button wire:click="saveReply" class="nav-link bg-light py-1 px-2 mb-0">reply</button>
@@ -63,17 +68,20 @@
                 </div>
             @endif
 
-            <!-- Child comments (replies) -->
-            @php
-                $replies = $post_comments->where('parent_id', $comment['id']);
-            @endphp
-
+            <!-- Toggle Button and Replies -->
             @if ($replies->count() > 0)
-                <ul style="padding-left: 10px">
-                    @foreach ($replies as $reply)
-                        <x-reply-comment :comment="$reply" :post_comments="$post_comments" :replyingTo="$replyingTo" />
-                    @endforeach
-                </ul>
+                <div class="my-2">
+                    <button @click="showReplies = !showReplies" class="btn btn-link btn-sm p-0">
+                        <span x-show="!showReplies">show replay ({{ $replies->count() }})</span>
+                        <span x-show="showReplies">hide replay</span>
+                    </button>
+
+                    <ul x-show="showReplies" style="padding-left: 10px;" x-transition>
+                        @foreach ($replies as $reply)
+                            <x-reply-comment :comment="$reply" :post_comments="$post_comments" :replyingTo="$replyingTo" />
+                        @endforeach
+                    </ul>
+                </div>
             @endif
         </div>
     </div>
