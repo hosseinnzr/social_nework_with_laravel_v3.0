@@ -68,21 +68,21 @@
                 </div>
             @endif
 
-            <!-- Toggle Button and Replies -->
             @if ($replies->count() > 0)
-                <div class="my-2">
-                    <button @click="showReplies = !showReplies" class="btn btn-link btn-sm p-0">
-                        <span x-show="!showReplies">show replay ({{ $replies->count() }})</span>
-                        <span x-show="showReplies">hide replay</span>
+                <div class="my-1" x-data="{ showReplies_{{ $comment['id'] }}: false }" x-init="$watch('showReplies_{{ $comment['id'] }}', value => {})">
+                    <button @click="showReplies_{{ $comment['id'] }} = !showReplies_{{ $comment['id'] }}" class="btn btn-link btn-sm p-0">
+                        <span x-show="!showReplies_{{ $comment['id'] }}">show replay</span>
+                        <span x-show="showReplies_{{ $comment['id'] }}">hide replay</span>
                     </button>
 
-                    <ul x-show="showReplies" style="padding-left: 10px;" x-transition>
+                    <ul x-show="showReplies_{{ $comment['id'] }}" style="padding-left: 10px;" x-transition>
                         @foreach ($replies as $reply)
                             <x-reply-comment :comment="$reply" :post_comments="$post_comments" :replyingTo="$replyingTo" />
                         @endforeach
                     </ul>
                 </div>
             @endif
+
         </div>
     </div>
 </li>

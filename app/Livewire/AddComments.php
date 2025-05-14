@@ -29,8 +29,6 @@ class AddComments extends Component
 
     public $show_load_more = true;
 
-    public $amount = 5;
-
     public $comment_number = 0;
 
     public $parentId = null;
@@ -54,8 +52,6 @@ class AddComments extends Component
             'parent_id' => $this->replyingTo,
             'like' => 0,
             'like_number' => 0,
-            // 'user_profile' => Auth::user()->profile_pic,
-            // 'user_name' => Auth::user()->user_name,
         ]);
 
         // send reply notification
@@ -71,8 +67,6 @@ class AddComments extends Component
             'comment_value' => $this->comment,
             'like' => '0',
             'like_number' => '0',
-            // 'user_profile' => Auth::user()->profile_pic ,
-            // 'user_name' => Auth::user()->user_name,
             'parent_id' => $this->parentId,
         ];
 
@@ -103,15 +97,8 @@ class AddComments extends Component
         $this->comment = '';
         $this->parentId = null;
     }
-
-    public function loadMore(){
-        
-        $this->amount += 5;
-
-    }
-
-    public function like($comment_id)
-    {
+    
+    public function like($comment_id){
         if(!likeComment::where('UID',auth::id())->where('comment_id', $comment_id)->exists())
         {
             $check = likeComment::create([
@@ -148,14 +135,6 @@ class AddComments extends Component
     }
 
     public function render(){
-        // load more
-        $this->comment_number = count(comments::latest()->where('post_id', $this->postId)->where('isDeleted', 0)->get());
-
-        if($this->amount >= $this->comment_number){
-            $this->show_load_more = false;
-        }
-
-        // $this->post_comments = comments::latest()->where('post_id', $this->postId)->where('isDeleted', 0)->limit($this->amount)->get();
         $this->post_comments = comments::latest()->where('post_id', $this->postId)->where('isDeleted', 0)->get();
 
         // check liked
