@@ -371,7 +371,6 @@
             <!-- Card header START -->
             <div class="card-header d-flex justify-content-between align-items-center border-0 pb-0">
               <h6 class="card-title mb-0">People you may know</h6>
-              <button class="btn btn-sm btn-primary-soft"> See more </button>
             </div>      
             <!-- Card header START -->
   
@@ -391,11 +390,10 @@
                             <a href="/user/{{$new_user->user_name}}"><img class="avatar-img rounded-circle" src="{{$new_user->profile_pic}}" alt=""></a>
                           </div>
                           <h6 class="card-title mb-1 mt-3"> <a href="/user/{{$new_user->user_name}}">{{$new_user->user_name}}</a></h6>
-                          <p class="mb-0 small lh-sm">{{$new_user->first_name}} </br> {{$new_user->last_name}}</p>
                         </div>
                         <!-- Card footer -->
                         <div class="card-footer p-2 border-0">
-                          <button class="btn btn-sm btn-primary-soft w-100"> follow </button>
+                          <a href="/user/{{$new_user->user_name}}" class="btn btn-sm btn-primary-soft w-100"> view profile </a>
                         </div>
                       </div>
                       <!-- Card add friend item END -->
@@ -444,7 +442,7 @@
                       <p class="mb-0 small text-truncate">{{$new_user->first_name}} {{$new_user->last_name}}</p>
                     </div>
                     <!-- Button -->
-                    <a class="btn btn-primary-soft rounded-circle icon-md ms-auto" href="/user/{{$new_user->user_name}}" ><i class="fa-solid fa-plus"> </i></a>
+                    <a class="btn btn-primary-soft rounded-circle icon-md ms-auto" href="/user/{{$new_user->user_name}}" ><i class="bi bi-person-circle"> </i></a>
                   </div>
                 @endforeach
                 <!-- Connection item END -->
