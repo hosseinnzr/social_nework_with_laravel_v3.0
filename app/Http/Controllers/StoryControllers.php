@@ -61,7 +61,7 @@ class StoryControllers extends Controller
     public function create(Request $request){
         if(auth::check()){
             $request->validate([
-                'description' => 'required',
+                'story_picture' => 'required',
             ]);
 
             $inputs = $request->only([

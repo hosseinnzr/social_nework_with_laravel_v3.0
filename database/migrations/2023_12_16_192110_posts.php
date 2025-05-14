@@ -12,11 +12,10 @@ return new class extends Migration
         Schema::create('post', function (Blueprint $table) {
             $table->id();
             $table->string('UID');
-            $table->string('post');
+            $table->string('post')->nullable();
             $table->longText('tag')->nullable();
             $table->boolean('delete')->default(0);
             $table->integer('like_number')->default(0);
-
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
