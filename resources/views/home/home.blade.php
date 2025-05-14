@@ -34,13 +34,13 @@
               <!-- Card START -->
               <div style="border: 0px;" class="card overflow-hidden">
                 <!-- Cover image -->
-                <div class="h-50px" style="background-image:url(assets/images/bg/01.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
+                <div class="h-60px" style="background-image:url(assets/images/background/home-background-01.png); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
                   <!-- Card body START -->
                   <div class="card-body pt-0">
                     <div class="text-center">
                     <!-- Avatar -->
                     <div class="avatar avatar-xl mt-n5 mb-3">
-                      <a href="#!"><img class="avatar-img rounded border border-white border-3" src="{{auth()->user()->profile_pic}}" alt=""></a>
+                      <a href="#!"><img class=" avatar-img rounded-circle border border-white border-3" src="{{auth()->user()->profile_pic}}" alt=""></a>
                     </div>
 
                     <!-- Info -->
