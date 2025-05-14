@@ -100,7 +100,7 @@
             <li class="dropdown-divider"></li>
 
             <li>
-              <form action="{{route('logout')}}" method="POST">
+              <form action="{{route('logout.post')}}" method="POST">
                 @csrf
                 <button style="color: red;" type="submit" class="dropdown-item"><i class="bi bi-power fa-fw me-2"></i>Sign Out</button>
               </form>
