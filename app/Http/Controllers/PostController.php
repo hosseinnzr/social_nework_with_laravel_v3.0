@@ -61,10 +61,8 @@ class PostController extends Controller
         if (Auth::check()) {
 
             $request->validate([
-                'post' => 'required',
                 'post_file' => 'required',
             ], [
-                'post.required' => 'caption filed required',
                 'post_file.required' => 'media filed required',
             ]);
             
