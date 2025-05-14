@@ -14,8 +14,6 @@ return new class extends Migration
             $table->string('comment_value');
             $table->string('UID');
             $table->string('post_id');
-            $table->string('user_name');
-            $table->string('user_profile');
             $table->unsignedBigInteger('parent_id')->nullable()->after('post_id');
             $table->timestamps();
         });

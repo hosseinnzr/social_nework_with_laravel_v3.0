@@ -20,8 +20,6 @@ class comments extends Model
         'post_id',
         'comment_value',
         'UID',
-        'user_name',
-        'user_profile',
         'isDeleted',
         'parent_id'
     ];

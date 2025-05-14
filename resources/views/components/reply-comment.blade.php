@@ -17,7 +17,8 @@
                         <a href="/user/{{ $comment['user_name'] }}">{{ $comment['user_name'] }}</a>
                     </p>    
                 </div>
-
+                
+                &nbsp;
 
                 <div class="d-flex align-items-center">
                     <div style="margin-right: 6px">

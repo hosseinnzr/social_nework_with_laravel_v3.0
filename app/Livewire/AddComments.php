@@ -37,19 +37,16 @@ class AddComments extends Component
     public $replyingTo = null;
     public $replyComment = '';
 
-    public function startReply($commentId)
-    {
+    public function startReply($commentId){
         $this->replyingTo = $commentId;
     }
 
-    public function cancelReply()
-    {
+    public function cancelReply(){
         $this->replyingTo = null;
         $this->replyComment = '';
     }
 
-    public function saveReply()
-    {
+    public function saveReply(){
         comments::create([
             'UID' => Auth::id(),
             'post_id' => $this->postId,
@@ -57,8 +54,8 @@ class AddComments extends Component
             'parent_id' => $this->replyingTo,
             'like' => 0,
             'like_number' => 0,
-            'user_profile' => Auth::user()->profile_pic,
-            'user_name' => Auth::user()->user_name,
+            // 'user_profile' => Auth::user()->profile_pic,
+            // 'user_name' => Auth::user()->user_name,
         ]);
 
         // send reply notification
@@ -74,8 +71,8 @@ class AddComments extends Component
             'comment_value' => $this->comment,
             'like' => '0',
             'like_number' => '0',
-            'user_profile' => Auth::user()->profile_pic ,
-            'user_name' => Auth::user()->user_name,
+            // 'user_profile' => Auth::user()->profile_pic ,
+            // 'user_name' => Auth::user()->user_name,
             'parent_id' => $this->parentId,
         ];
 
@@ -130,8 +127,7 @@ class AddComments extends Component
 
     }
 
-    public function dislike($comment_id)
-    {
+    public function dislike($comment_id){
         $find_like_post = likeComment::where('UID',auth::id())->where('comment_id', $comment_id);
 
         $check = $find_like_post->delete();
@@ -151,8 +147,7 @@ class AddComments extends Component
         }
     }
 
-    public function render()
-    {
+    public function render(){
         // load more
         $this->comment_number = count(comments::latest()->where('post_id', $this->postId)->where('isDeleted', 0)->get());
 
@@ -170,6 +165,11 @@ class AddComments extends Component
             }else{
                 $single_comment['liked'] = false;
             }
+
+            $user = User::findOrFail($single_comment['UID']);
+
+            $single_comment['user_name'] = $user['user_name'];
+            $single_comment['user_profile'] = $user['profile_pic'];
 
             $single_comment['like_number'] = likeComment::where('comment_id', $single_comment['id'])->count();
         }
