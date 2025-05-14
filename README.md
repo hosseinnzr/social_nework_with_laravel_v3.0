@@ -1,3 +1,7 @@
+## for route cache
+php artisan route:cache
+php artisan route:clear
+
 ## for use crop img
 php artisan serve --host=0.0.0.0 --port=8000    
 

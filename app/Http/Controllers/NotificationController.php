@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\notifications;
 use Illuminate\Support\Facades\Auth;
+
+use App\Models\notifications;
 
 class NotificationController extends Controller
 {
@@ -13,9 +13,5 @@ class NotificationController extends Controller
         return view('pages.notifications',[
             'user_notifications' => $notifications,
         ]);
-    }
-
-    public function destroy(){
-
     }
 }

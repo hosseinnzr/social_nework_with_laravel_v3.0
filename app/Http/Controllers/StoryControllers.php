@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -58,7 +59,6 @@ class StoryControllers extends Controller
     }
 
     public function create(Request $request){
-
         if(auth::check()){
             $request->validate([
                 'description' => 'required',

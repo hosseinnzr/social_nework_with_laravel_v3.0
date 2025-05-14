@@ -2,146 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\User;
-use App\Models\story;
-use App\Models\follow;
-use App\Models\likePost;
-use App\Models\hashtag;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
+use App\Models\Post;
+use App\Models\User;
+use App\Models\follow;
+use App\Models\hashtag;
+
 use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {   
-
-    public function home(Request $request){
-        if(auth::check()){
-
-            $user_following = follow::where('follower_id', Auth::id())->pluck('following_id')->toArray();
-            $user_follower = follow::where('following_id', Auth::id())->pluck('follower_id')->toArray();
-
-            $signin_user_id = Auth::id();
-
-            $new_users = User::all()->sortByDesc('id')->whereNotIn('id', $user_following)->whereNotIn('id', $user_follower)->where('id', '!=', $signin_user_id)->take(5);
-
-            $posts = Post::latest()->where('delete', 0)->whereIn('UID', $user_following)->get();
-
-            $user_have_story = array_merge([strval(auth::id())], $user_following);
-
-            $order = "CASE";
-            foreach ($user_have_story as $index => $uid) {
-                $order .= " WHEN UID = $uid THEN $index";
-            }
-            $order .= " END";
-
-            $storys = story::whereIn('UID', $user_have_story)
-                        ->select('id', 'UID')
-                        ->orderByRaw($order)
-                        ->groupBy('UID')
-                        ->get();
-
-            foreach ($storys as $story) {
-                $user = User::where('id', $story->UID)->select('user_name', 'profile_pic')->first();
-                $story['user_name'] = $user['user_name'];
-                $story['user_profile_pic'] = $user['profile_pic'];
-            }
-            
-            foreach ($posts as $post) {
-                $user = User::where('id', $post->UID)->select('id', 'user_name', 'profile_pic')->first();
-                $post['user_id'] = $user['id'];
-                $post['user_name'] = $user['user_name'];
-                $post['user_profile_pic'] = $user['profile_pic'];
-            }
-
-            $follower_user = User::whereIn('id', $user_follower)->select('user_name', 'first_name', 'last_name', 'profile_pic')->get();
-            $following_user = User::whereIn('id', $user_following)->select('user_name', 'first_name', 'last_name', 'profile_pic')->get();
-
-            return view('home.home', [
-                'posts' => $posts,
-                'follower_user' => $follower_user,
-                'following_user' => $following_user,
-                'new_users' => $new_users,
-                'storys' => $storys,
-            ]);    
-            
-        } else {
-            return redirect()->route('signin');
-        }
-    }
-
-    public function explore(Request $request){
-        if(auth::check()){
-
-            if (isset($request->tag)) {
-                $hash_tag = $request->tag;
-                $find_posts = Post::where('delete', 0)
-                            ->whereRaw("FIND_IN_SET(?, tag)", [ $hash_tag])
-                            ->orderBy('created_at', 'desc')
-                            ->get();
-            }else{
-
-                $user_liked_post = likePost::where('UID', Auth::id())->pluck('post_id')->toArray(); // with out video
-            
-                $liked_posts = Post::where('delete', 0)->whereIn('id', $user_liked_post)->whereNot('post_picture', null)->get();
-                $found_image_name = [];
-
-                // Example: python find_similar_faiss.py 12323423.png 5
-
-                // find same post for show in explor
-                foreach ($liked_posts as $post) {
-                    $imageName = $post->post_picture;
-
-                    $pythonFilePath = public_path('explore_algorithm/find_similar.py') . ' ' . $imageName;
-                    $pythonExe = 'C:\\Users\\hossein\\AppData\\Local\\Programs\\Python\\Python313\\python.exe';
-
-                    $command = '' . $pythonExe . ' ' . $pythonFilePath . ' ';
-                    $output = shell_exec($command);
-
-                    $clean = str_replace(["[", "]", "'"], "", $output);
-                    $array = explode(", ", $clean);
-
-                    $found_image_name = array_merge($found_image_name, $array);
-                }
-                
-                $found_image_name = array_unique($found_image_name);
-                
-                $hash_tag = null;
-
-                $find_posts = Post::where('delete', 0)->orderBy('created_at', 'desc');
-                
-                if (!empty($found_image_name)) {
-                    $find_posts->where(function ($query) use ($found_image_name) {
-                        foreach ($found_image_name as $name) {
-                            $query->orWhere('post_picture', 'like', '%' . trim($name) . '%');
-                        }
-                    });
-                }
-                
-                $find_posts = $find_posts->get();
-            }
-
-            foreach ($find_posts as $post) {
-                $user = User::where('id', $post->UID)->select('id', 'user_name', 'profile_pic')->first();
-                $post['user_id'] = $user['id'];
-                $post['user_name'] = $user['user_name'];
-                $post['user_profile_pic'] = $user['profile_pic'];
-            }
-
-            return view('pages.explore', [
-                'hash_tag' => $hash_tag,
-                'posts' => $find_posts,
-            ]);    
-            
-        } else {
-            return redirect()->route('signin');
-        }
-    }
-
     public function viewPost($id){
         if(auth::check()){
             $post = post::findOrFail($id);
@@ -184,7 +58,6 @@ class PostController extends Controller
     }
     
     public function create(Request $request){
-
         if (Auth::check()) {
 
             $request->validate([
@@ -320,8 +193,7 @@ class PostController extends Controller
         }
     }
 
-    public function update(Request $request)
-    {
+    public function update(Request $request){
         if (isset($request->id)) {
             $request->validate([
                 'post' => 'required',
@@ -403,16 +275,12 @@ class PostController extends Controller
 
                 // write tag in database
                 $inputs['tag'] = $tags;
-            }
-
-            // اگر فایل جدید نفرستاده بود ولی تگ و کپشن و ... عوض شده بود
-            else {
+            }else {
                 $inputs['post_picture'] = $oldPostPicture;
                 $inputs['post_video'] = $oldPostVideo;
                 $inputs['video_cover'] = $oldVideoCover;
                 $inputs['tag'] = $tags;
             }
-
 
             // update hashtag table
             foreach ($tags_array as $tag) {
@@ -449,7 +317,6 @@ class PostController extends Controller
             return redirect()->route('/signin');
         }
     }
-
 
     public function delete(Request $request){
         $post = Post::findOrFail($request->id);
