@@ -57,9 +57,9 @@
                   <div class="chat-tab-list custom-scrollbar">
                     <ul class="nav flex-column nav-pills nav-pills-soft">
                         @foreach ($conversations as $conversation)
-                            @if ($conversation->sender_id == $userId)
+                            @if ($conversation->sender == $userId)
                                 @for ($m = 0; $m < $alluser_count; $m++)
-                                @if ($alluser[$m]['id'] == $conversation->receiver_id)
+                                @if ($alluser[$m]['id'] == $conversation->receiver)
                                     <li data-bs-dismiss="offcanvas">
                                         <form wire:submit="result({{$conversation->id}})" >
                                             <div class="d-grid gap-2">
@@ -83,7 +83,7 @@
                                 @endfor 
                             @else
                                 @for ($m = 0; $m < $alluser_count; $m++)
-                                @if ($alluser[$m]['id'] == $conversation->sender_id)
+                                @if ($alluser[$m]['id'] == $conversation->sender)
                                     <li data-bs-dismiss="offcanvas">
                                         <form wire:submit="result({{$conversation->id}})" >
                                             <div class="d-grid gap-2">
@@ -170,7 +170,7 @@
                   @if ($user_in_chat)
                   <div wire:poll.visible style="height: calc(100% - 60px); overflow-y:scroll"  class="chat-conversation-content custom-scrollbar">
                       @for ($i = 0; $i < $show_messages_count; $i++)
-                          @if ( $show_messages[$i]['sender_id'] == $userId )
+                          @if ( $show_messages[$i]['sender'] == $userId )
                               <!-- Chat message right -->
                               <div class="d-flex justify-content-end text-end mb-1">
                                   <div class="w-100">

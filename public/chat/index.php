@@ -11,24 +11,24 @@ $currentUserId = $_SESSION['user']['id'];
 $currentUserName = $_SESSION['user']['user_name'];
 
 $sql = "
-SELECT DISTINCT u.id, u.user_name, u.profile_pic
-FROM users u
-WHERE u.id != :currentUserId
-  AND (
-    u.id IN (
-      SELECT following_id FROM follow WHERE follower_id = :currentUserId
+    SELECT DISTINCT u.id, u.user_name, u.profile_pic
+    FROM users u
+    WHERE u.id != :currentUserId
+    AND (
+        u.id IN (
+        SELECT following_id FROM follow WHERE follower_id = :currentUserId
+        )
+        OR
+        u.id IN (
+        SELECT follower_id FROM follow WHERE following_id = :currentUserId
+        )
+        OR
+        u.user_name IN (
+        SELECT sender FROM messages WHERE receiver = :currentUserName
+        UNION
+        SELECT receiver FROM messages WHERE sender = :currentUserName
+        )
     )
-    OR
-    u.id IN (
-      SELECT follower_id FROM follow WHERE following_id = :currentUserId
-    )
-    OR
-    u.user_name IN (
-      SELECT sender FROM messages WHERE receiver = :currentUserName
-      UNION
-      SELECT receiver FROM messages WHERE sender = :currentUserName
-    )
-  )
 ";
 
 $stmt = $pdo->prepare($sql);
@@ -38,10 +38,6 @@ $stmt->execute([
 ]);
 
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// $stmt = $pdo->prepare("SELECT user_name, profile_pic FROM users WHERE user_name != :username");
-// $stmt->execute([':username' => $_SESSION['user']['user_name']]);
-// $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -118,8 +114,6 @@ body {
         </div>
     </nav>
 
-    <!-- <link rel="stylesheet" href="assets/style.css"> -->
-
     <!-- Main -->
     <div class="container">
         <br>
@@ -142,7 +136,7 @@ body {
                         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                         </svg>
                   </button>
-                    <ul class="list-group" id="usersListModal">
+                    <ul style="max-height:60vh; overflow-y:auto;" class="list-group" id="usersListModal">
                         <?php foreach($users as $user): ?>
                             <li class="list-group-item user-item" data-username="<?php echo htmlspecialchars($user['user_name']); ?>">
                                 <img src="<?php echo $user['profile_pic']; ?>" class="rounded-circle" width="30" height="30"> 
@@ -156,7 +150,7 @@ body {
             <!-- in Desktop  -->
             <div class="col-md-4 d-none d-md-block">
                 <br>
-                <ul class="list-group" id="usersList">
+                <ul style="max-height:60vh; overflow-y:auto;" class="list-group" id="usersList">
                     <?php foreach($users as $user): ?>
                         <li class="list-group-item user-item" data-username="<?php echo htmlspecialchars($user['user_name']); ?>">
                             <img src="<?php echo $user['profile_pic']; ?>" class="rounded-circle" width="40" height="40"> 
@@ -312,7 +306,6 @@ body {
                 msgList.append(
                     "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
                         "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:40vh;'>" +
-                            "<strong>" + data.user + ":</strong><br>" +
                             contentHtml +
                             "<br><small>(" + data.created_at + ")</small>" +
                         "</div>" +
@@ -369,7 +362,7 @@ body {
                             msgList.append(
                                 "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
                                     "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:70%;'>" +
-                                        "<strong>" + msg.sender + ":</strong> " + msg.body + "<br><small>(" + msg.created_at + ")</small>" +
+                                        msg.body + "<br><small>(" + msg.created_at + ")</small>" +
                                     "</div>" +
                                 "</li>"
                             );
@@ -429,21 +422,11 @@ body {
             msgList.append(
                 "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
                     "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:40vh;'>" +
-                        "<strong>" + username + ":</strong><br>" +
                         contentHtml +
                         "<br><small>(" + currentTime + ")</small>" +
                     "</div>" +
                 "</li>"
             );
-
-
-            // msgList.append(
-            //     "<li style='display: flex; " + alignmentStyle + " margin:5px 0;'>" +
-            //         "<div style='background:" + bgColor + "; padding:8px; border-radius:10px; max-width:70%;'>" +
-            //             "<strong>" + username + ":</strong> " + message + "<br><small>(" + currentTime + ")</small>" +
-            //         "</div>" +
-            //     "</li>"
-            // );
 
             userMessage.val(''); // پاک کردن اینپوت
             scrollToBottom();

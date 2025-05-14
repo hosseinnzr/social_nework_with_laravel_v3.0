@@ -13,8 +13,8 @@ class conversations extends Model
     protected $table = 'conversations';
 
     protected $fillable = [
-        'sender_id',
-        'receiver_id',
+        'sender',
+        'receiver',
         'deleted_at',
     ];
 }

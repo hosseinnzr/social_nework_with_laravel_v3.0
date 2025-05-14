@@ -30,8 +30,8 @@ class SendPost extends Component
 
             if($post_info->post_picture != null){
                 $createdMessage = messages::create([
-                    'sender_id' => auth::user()->user_name,
-                    'receiver_id' => $find_user_name,
+                    'sender' => auth::user()->user_name,
+                    'receiver' => $find_user_name,
                     'body' => '/post-picture/'.$post_info->post_picture,
                 ]);
 
@@ -44,8 +44,8 @@ class SendPost extends Component
                 }
             }else{
                 $createdMessage = messages::create([
-                    'sender_id' => auth::user()->user_name,
-                    'receiver_id' => $find_user_name,
+                    'sender' => auth::user()->user_name,
+                    'receiver' => $find_user_name,
                     'body' => '/post-video/'.$post_info->post_video,
                 ]);
 
