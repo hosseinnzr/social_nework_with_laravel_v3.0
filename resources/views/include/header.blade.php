@@ -38,21 +38,21 @@
 
         <!-- chat -->
 				<li class="nav-item ms-2" title="chat">
-					<a class="nav-link icon-md btn btn-light p-0" href="{{ route('chat') }}">
+					<a class="nav-link icon-md btn btn-light p-0" href="{{ route('chat') }}"  target="_blank">
 						<i class="bi bi-chat-left-text-fill fs-6"> </i>
 					</a>
 				</li>
         
         <!-- add post -->
         <li class="nav-item ms-2" title="add post">
-					<a class="nav-link icon-md btn btn-light p-0" href="{{ route('post.store')}}">
+					<a class="nav-link icon-md btn btn-light p-0" href="{{ route('post.store')}}" target="_blank">
 						<i class="fa-solid fa-plus fs-6"></i>
 					</a>
 				</li>
 
         <!-- explore -->
         <li class="nav-item ms-2" title="explore">
-					<a class="nav-link icon-md btn btn-light p-0" href="{{ route('explore')}}">
+					<a class="nav-link icon-md btn btn-light p-0" href="{{ route('explore')}}" target="_blank">
 						<i class="bi bi-compass-fill fs-6"> </i>
 					</a>
 				</li>
@@ -93,8 +93,8 @@
             <!-- Links -->
             <li><a class="dropdown-item" href="{{ route('settings')}}"><i class="bi bi-gear fa-fw me-2"></i>Settings</a></li>
             <li> 
-              <a class="dropdown-item" href="https://support.webestica.com/" target="_blank">
-                <i class="fa-fw bi bi-life-preserver me-2"></i>Support
+              <a class="dropdown-item" href="#" target="_blank">
+                <i class="fa-fw bi bi-life-preserver me-2"></i>Privacy & terms
               </a> 
             </li>
             <li class="dropdown-divider"></li>
