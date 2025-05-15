@@ -273,6 +273,12 @@
 
                                 <div class="comments-container" style="height: 420px; overflow-y: auto;">
                                   <p style="width: 100%;" class="mb-0">{{$post['post']}}</p>
+
+                                  @foreach(explode(",", $post['tag']) as $tag)
+                                    @if ($tag != '')
+                                      <a href="/explore/?tag={{str_replace('#', '', $tag)}}">#{{$tag}} </a>
+                                    @endif
+                                  @endforeach
                                   <br>
                                   @livewire('add-comments', ['postId' => $post['id'], 'post' => $post])
                                 </div>
