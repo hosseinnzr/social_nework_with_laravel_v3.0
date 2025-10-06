@@ -29,9 +29,18 @@ It integrates **Laravel**, **MySQL**, and **WebSocket** technologies to deliver 
 - 🧼 Content management (edit/delete posts)  
 - 🔒 Account removal & security settings
 
+home page
+--
 ![profile](https://github.com/user-attachments/assets/0bef00ce-df23-4f7c-9ad4-88e8728a1e59)
 
+manage notification
+--
+<img width="1508" height="488" alt="Screenshot 2025-05-19 002640" src="https://github.com/user-attachments/assets/1b2ebe05-3640-4f20-8a19-33a3aa84f113" />
+
+comment post
 ---
+<img width="812" height="542" alt="Screenshot 2025-05-15 231252" src="https://github.com/user-attachments/assets/125b6dc4-37d2-4f45-808c-f8fed893ca44" />
+
 
 ## 🧠 Smart Explore System (AI-Based)
 
@@ -42,7 +51,8 @@ When a user likes a post, the system analyzes its image, extracts visual feature
 - Similarity search via `find_similar.py`  
 - Enables personalized content recommendations for each user
 
-
+explore page
+--
 <img width="1556" height="863" alt="Screenshot 2025-05-15 215556" src="https://github.com/user-attachments/assets/d5ed79a3-d252-4eac-af57-313c1256c2e8" />
 
 ---
@@ -55,6 +65,8 @@ It supports:
 - Real-time updates and notifications  
 - Modern UI for chat management  
 
+chat page
+--
 <img width="1433" height="858" alt="Screenshot 2025-05-14 144523" src="https://github.com/user-attachments/assets/04c5fad0-1d41-48d5-8c67-79b6a363a771" />
 
 ---
@@ -83,8 +95,7 @@ It also includes a **dedicated admin panel** that connects directly to the datab
 
 ---
 
-## ⚙️ Installation & Setup
-
+## tools & package
 ### For Clean Route Cache
 ```bash
 php artisan route:cache
@@ -94,7 +105,7 @@ php artisan route:clear
 ### for use crop img
 composer require intervention/image
 install gd in windows and enable extention in xammp
-composer require simplesoftwareio/simple-qrcode "~4"
+composer require simplesoftwareio/simple-qrcode
 
 updaet value upload_max_filesize and post_max_size size in php.ini
 php artisan storage:link
@@ -105,7 +116,7 @@ To run this Laravel app, you need to have the following software installed on yo
 - [Composer](https://getcomposer.org/)
 
 
-### Installation
+## ⚙️ Installation & Setup
 1. Extract file.
 
 2. Change into the project directory:
