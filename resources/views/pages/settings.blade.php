@@ -48,12 +48,12 @@
                   <li class="nav-item" data-bs-dismiss="offcanvas">
                     <a class="nav-link d-flex mb-0" href="#nav-setting-tab-3" data-bs-toggle="tab"> <img class="me-2 h-20px fa-fw" src="{{asset("assets/images/icon/shield-outline-filled.svg")}}" alt=""><span>Privacy and safety </span></a>
                   </li>
-                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                  {{-- <li class="nav-item" data-bs-dismiss="offcanvas">
                     <a class="nav-link d-flex mb-0" href="#nav-setting-tab-4" data-bs-toggle="tab"> <img class="me-2 h-20px fa-fw" src="{{asset("assets/images/icon/handshake-outline-filled.svg")}}" alt=""><span>Communications </span></a>
-                  </li>
-                  <li class="nav-item" data-bs-dismiss="offcanvas">
+                  </li> --}}
+                  {{-- <li class="nav-item" data-bs-dismiss="offcanvas">
                     <a class="nav-link d-flex mb-0" href="#nav-setting-tab-5" data-bs-toggle="tab"> <img class="me-2 h-20px fa-fw" src="{{asset("assets/images/icon/chat-alt-outline-filled.svg")}}" alt=""><span>Messaging </span></a>
-                  </li>
+                  </li> --}}
                   <li class="nav-item" data-bs-dismiss="offcanvas">
                     <a class="nav-link d-flex mb-0" href="#nav-setting-tab-6" data-bs-toggle="tab"> <img class="me-2 h-20px fa-fw" src="{{asset("assets/images/icon/trash-var-outline-filled.svg")}}" alt=""><span>Delete account </span></a>
                   </li>
@@ -63,7 +63,7 @@
               </div>
               <!-- Card body END -->
               <!-- Card footer -->
-              <div class="card-footer text-center py-2">
+              <div class="card-footer text-center py-3">
                 <a class="btn btn-link text-secondary btn-sm" type="submit" href="{{ route('profile', ['user_name' => Auth::user()->user_name]) }}">View Profile </a>
               </div>
               </div>
@@ -445,7 +445,6 @@
                 <!-- Title START -->
                 <div class="card-header border-0 pb-0">
                   <h5 class="card-title">Messaging privacy settings</h5>
-                  <p class="mb-0">As young ye hopes no he place means. Partiality diminution gay yet entreaties admiration. In mention perhaps attempt pointed suppose. Unknown ye chamber of warrant of Norland arrived. </p>
                 </div>
                 <!-- Title START -->
                 <div class="card-body">
@@ -507,56 +506,13 @@
                     </li>
                   </ul>
                   <!-- Message END -->
-              </div>
-               <!-- Button save -->
-               <div class="card-footer pt-0 text-end border-0">
-                <button type="submit" class="btn btn-sm btn-primary mb-0">Save changes</button>
-              </div>
+                </div>
+                <!-- Button save -->
+                <div class="card-footer pt-0 text-end border-0">
+                  <button type="submit" class="btn btn-sm btn-primary mb-0">Save changes</button>
+                </div>
               </div>
               <!-- Messaging privacy END -->
-              <!-- Messaging experience START -->
-              <div class="card">
-                <!-- Card header START -->
-                <div class="card-header border-0 pb-0">
-                  <h5 class="card-title">Messaging experience</h5>
-                  <p class="mb-0">Arrived off she elderly beloved him affixed noisier yet. </p>
-                </div>
-                <!-- Card header START -->
-                <!-- Card body START -->
-                <div class="card-body">
-                  <!-- Message START -->
-                  <ul class="list-group list-group-flush">
-                    <!-- Message list item -->
-                    <li class="list-group-item d-sm-flex justify-content-between align-items-center px-0">
-                      <div class="me-2">
-                        <h6 class="mb-0">Read receipts and typing indicators</h6>
-                      </div>
-                      <button class="btn btn-primary-soft btn-sm mt-1 mt-md-0"> <i class="bi bi-pencil-square"></i> Change</button>
-                    </li>
-                    <!-- Message list item -->
-                    <li class="list-group-item d-sm-flex justify-content-between align-items-center px-0">
-                      <div class="me-2">
-                        <h6 class="mb-0">Message suggestions</h6>
-                      </div>
-                      <button class="btn btn-primary-soft btn-sm mt-1 mt-md-0"> <i class="bi bi-pencil-square"></i> Change</button>
-                    </li>
-                    <!-- Message list item -->
-                    <li class="list-group-item d-sm-flex justify-content-between align-items-center px-0">
-                      <div class="me-2">
-                        <h6 class="mb-0">Message nudges</h6>
-                      </div>
-                      <button class="btn btn-primary-soft btn-sm mt-1 mt-md-0"> <i class="bi bi-pencil-square"></i> Change</button>
-                    </li>
-                  </ul>
-                  <!-- Message END -->
-                </div>
-              <!-- Card body END -->
-               <!-- Button save -->
-               <div class="card-footer pt-0 text-end border-0">
-                <button type="submit" class="btn btn-sm btn-primary mb-0">Save changes</button>
-              </div>
-              </div>
-              <!-- Messaging experience END -->
             </div>
             <!-- Messaging tab END -->
 
