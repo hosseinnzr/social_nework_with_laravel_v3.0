@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('hashtag', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id')->primary();
             $table->string('name');
-            $table->longText('post_id')->default(null);
-            $table->string('number')->default(1);
+            $table->longText('post_id');
+            $table->integer('number')->default(0);
             $table->timestamps();
         });
     }

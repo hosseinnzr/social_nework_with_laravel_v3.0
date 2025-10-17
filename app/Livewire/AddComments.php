@@ -87,8 +87,8 @@ class AddComments extends Component
                 $userName = Auth::user();
                 Mail::to($user->email)
                 ->send(new commentNotifications(
-                    $userName['user_name'], 
-                    $this->comment, 
+                    $userName['user_name'],
+                    $this->comment,
                     $this->post['UID']
                 ));
             }
@@ -97,14 +97,15 @@ class AddComments extends Component
         $this->comment = '';
         $this->parentId = null;
     }
-    
+
     public function like($comment_id){
         if(!likeComment::where('UID',auth::id())->where('comment_id', $comment_id)->exists())
         {
             $check = likeComment::create([
                 'UID' => auth::id(),
                 'comment_id' => $comment_id,
-                // 'type'=> 'like',
+                'user_comment_id' => NULL,
+                'type'=> 'like'
             ]);
 
             if(!$check){

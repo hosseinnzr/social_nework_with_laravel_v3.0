@@ -10,16 +10,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->id();
-            $table->string('body');
-            $table->string('sender');
-            $table->string('receiver');
+            $table->bigIncrements('id');
+            $table->longText('body')->nullable();
+            $table->string('sender')->nullable();
+            $table->string('receiver')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamp('sender_deleted_at')->nullable();
             $table->timestamp('receiver_deleted_at')->nullable();
-            $table->timestamps();
+            $table->timestamps(); // created_at و updated_at
         });
-        
     }
 
 

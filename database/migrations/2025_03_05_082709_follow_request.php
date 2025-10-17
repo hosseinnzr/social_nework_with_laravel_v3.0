@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('follow_request', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id')->primary();
             $table->string('follower_id');
             $table->string('following_id');
             $table->timestamps();

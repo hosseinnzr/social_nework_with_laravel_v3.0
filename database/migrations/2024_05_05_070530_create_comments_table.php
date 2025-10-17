@@ -9,13 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('comments', function (Blueprint $table) {
-            $table->id();
-
-            $table->string('comment_value');
-            $table->string('UID');
-            $table->string('post_id');
-            $table->unsignedBigInteger('parent_id')->nullable()->after('post_id');
-            $table->timestamps();
+            $table->id(); // bigint unsigned, auto-increment
+            $table->string('comment_value', 255);
+            $table->string('UID', 200)->nullable();
+            $table->string('post_id', 10000)->nullable();
+            $table->boolean('isDeleted')->default(false);
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->timestamps(); // created_at و updated_at
         });
     }
 

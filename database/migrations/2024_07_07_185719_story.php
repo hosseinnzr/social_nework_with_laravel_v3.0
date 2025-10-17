@@ -13,6 +13,9 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('story_picture');
             $table->timestamps();
+            $table->string('UID');
+            $table->longText('like')->nullable();
+            $table->string('like_number')->default('0');
         });
     }
 

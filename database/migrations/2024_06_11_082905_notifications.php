@@ -11,13 +11,14 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('UID');
-            $table->string('body');
-            $table->string('type');
-            $table->string('user_profile')->default('/default/default_profile.jpg');
+            $table->string('body', 255);
+            $table->string('type', 255);
             $table->longText('from')->nullable();
-            $table->boolean('seen')->default('0');
+            $table->boolean('seen')->default(0);
             $table->timestamps();
+            $table->string('user_profile', 255)->default('/default/default_profile.jpg');
+            $table->string('delete', 10)->default('0');
+            $table->string('to', 255)->nullable();
         });
     }
 

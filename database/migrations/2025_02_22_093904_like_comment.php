@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('like_comment', function (Blueprint $table) {
-            $table->id();
+            $table->id()->unsigned();
             $table->string('UID');
             $table->string('comment_id');
-            $table->string('user_comment_id');
+            $table->string('user_comment_id')->nullable();
             $table->string('type')->default('like');
             $table->timestamps();
         });
