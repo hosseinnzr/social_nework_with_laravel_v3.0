@@ -1,44 +1,53 @@
 <?php
 session_start();
+
+// Redirect to homepage if user is not logged in
 if (!isset($_SESSION['user'])) {
     header('Location: /');
     exit;
 }
-require 'db.php'; 
 
+require 'db.php'; // Include database connection (SQLite PDO)
 
+// Get current user info from session
 $currentUserId = $_SESSION['user']['id'];
 $currentUserName = $_SESSION['user']['user_name'];
 
+// SQL query to get all relevant users for the current user
 $sql = "
     SELECT DISTINCT u.id, u.user_name, u.profile_pic
     FROM users u
     WHERE u.id != :currentUserId
     AND (
         u.id IN (
-        SELECT following_id FROM follow WHERE follower_id = :currentUserId
+            SELECT following_id FROM follow WHERE follower_id = :currentUserId
         )
         OR
         u.id IN (
-        SELECT follower_id FROM follow WHERE following_id = :currentUserId
+            SELECT follower_id FROM follow WHERE following_id = :currentUserId
         )
         OR
         u.user_name IN (
-        SELECT sender FROM messages WHERE receiver = :currentUserName
-        UNION
-        SELECT receiver FROM messages WHERE sender = :currentUserName
+            SELECT sender FROM messages WHERE receiver = :currentUserName
+            UNION
+            SELECT receiver FROM messages WHERE sender = :currentUserName
         )
     )
 ";
 
+// Prepare the statement
 $stmt = $pdo->prepare($sql);
+
+// Execute the statement with parameters
 $stmt->execute([
-  ':currentUserId' => $currentUserId,
-  ':currentUserName' => $currentUserName,
+    ':currentUserId' => $currentUserId,
+    ':currentUserName' => $currentUserName,
 ]);
 
+// Fetch all matching users as an associative array
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -103,7 +112,7 @@ body {
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <div class="container">
             <a class="navbar-brand p-1 pr-2" style="border-radius: 33px; background-color: #9199a0; display: flex; " href="user/<?php echo htmlspecialchars($_SESSION['user']['user_name']); ?>">
-                <img src="<?php echo $_SESSION['user']['profile_pic']; ?>" class="rounded-circle" width="30" height="30"> 
+                <img src="<?php echo $_SESSION['user']['profile_pic']; ?>" class="rounded-circle" width="30" height="30">
                 &nbsp;<?php echo htmlspecialchars($_SESSION['user']['user_name']); ?>&nbsp;
             </a>
             <div class="ml-auto">
@@ -127,7 +136,7 @@ body {
             </button>
 
             <!-- in Mobile -->
-            <div id="usersModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            <div id="usersModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
                 background-color: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
 
                 <div style="background: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px;">
@@ -139,7 +148,7 @@ body {
                     <ul style="max-height:60vh; overflow-y:auto;" class="list-group" id="usersListModal">
                         <?php foreach($users as $user): ?>
                             <li class="list-group-item user-item" data-username="<?php echo htmlspecialchars($user['user_name']); ?>">
-                                <img src="<?php echo $user['profile_pic']; ?>" class="rounded-circle" width="30" height="30"> 
+                                <img src="<?php echo $user['profile_pic']; ?>" class="rounded-circle" width="30" height="30">
                                 &nbsp;<?php echo htmlspecialchars($user['user_name']); ?>
                             </li>
                         <?php endforeach; ?>
@@ -153,7 +162,7 @@ body {
                 <ul style="max-height:60vh; overflow-y:auto;" class="list-group" id="usersList">
                     <?php foreach($users as $user): ?>
                         <li class="list-group-item user-item" data-username="<?php echo htmlspecialchars($user['user_name']); ?>">
-                            <img src="<?php echo $user['profile_pic']; ?>" class="rounded-circle" width="40" height="40"> 
+                            <img src="<?php echo $user['profile_pic']; ?>" class="rounded-circle" width="40" height="40">
                             &nbsp;<?php echo htmlspecialchars($user['user_name']); ?>
                         </li>
                     <?php endforeach; ?>
@@ -161,9 +170,9 @@ body {
             </div>
 
             <div class="col-md-8">
-            
+
                 <!-- show message header -->
-                <div style="display: flex; align-items: center; padding: 5px; margin-top:10px; background: #ccc; 
+                <div style="display: flex; align-items: center; padding: 5px; margin-top:10px; background: #ccc;
                 border-radius: 5px 5px 0px 0px;">
                     <div id="chatWith" style=" padding-left: 3px; font-weight:bold; font-size:18px; margin-right:10px;"></div>
                     <div id="typing" style="font-size:14px; color: #ff8000;"></div>
@@ -180,18 +189,18 @@ body {
                 <!-- send messange form -->
                 <form method="post" id="chatForm" style="margin-top: 10px;">
                     <div style="display: flex; align-items: center;">
-                        <input 
-                            type="text" 
-                            name="message" 
-                            placeholder="Message..." 
-                            id="message" 
-                            class="form-control" 
+                        <input
+                            type="text"
+                            name="message"
+                            placeholder="Message..."
+                            id="message"
+                            class="form-control"
                             style="flex: 1; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-right: none;"
                         />
-                        <input 
-                            type="submit" 
-                            id="subBtn" 
-                            class="btn btn-info" 
+                        <input
+                            type="submit"
+                            id="subBtn"
+                            class="btn btn-info"
                             value="Send"
                             style="border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 5px; border-bottom-right-radius: 5px;"
                             disabled
@@ -225,7 +234,7 @@ body {
 
     <!-- web socket caht script -->
     <script>
-        var username = "<?php echo $_SESSION['user']['user_name']; ?>"; 
+        var username = "<?php echo $_SESSION['user']['user_name']; ?>";
         var conn = null;
         var selectedUser = null;
         var chatForm = $('#chatForm');
@@ -253,7 +262,7 @@ body {
 
             // close old connection
             if (conn) {
-                conn.close();  
+                conn.close();
             }
 
             // connect to WebSocket
@@ -270,7 +279,7 @@ body {
                 if (data.type === 'typing') {
                     if (data.user === selectedUser) {
                         $('#typing').text(" typing...");
-                        
+
                         clearTimeout(window.typingTimeout);
                         window.typingTimeout = setTimeout(function() {
                             $('#typing').text("");
@@ -292,12 +301,12 @@ body {
                 let contentHtml = "";
 
                 if (data.message.startsWith("/post-video/")) {
-                    contentHtml = 
+                    contentHtml =
                         "<video controls style='max-width: 35vh; border-radius:10px;' max-height: 40vh; muted>" +
                             "<source src='" + data.message + "' type='video/mp4'>" +
                         "</video>";
                 } else if (data.message.startsWith("/post-picture/")) {
-                    contentHtml = 
+                    contentHtml =
                         "<img src='" + data.message + "' style='max-width: 100%; max-height: 40vh; border-radius:10px;' />";
                 } else {
                     contentHtml = data.message;
@@ -311,7 +320,7 @@ body {
                         "</div>" +
                     "</li>"
                 );
-                
+
                 if (!isOwnMessage) {
                     scrollToBottom();
                 }
@@ -370,7 +379,7 @@ body {
                         });
                         setTimeout(() => {
                             scrollToBottom();
-                        }, 1000); 
+                        }, 1000);
                     }
                 }
             });
@@ -408,12 +417,12 @@ body {
             let contentHtml = "";
 
             if (message.startsWith("/post-video/")) {
-                contentHtml = 
+                contentHtml =
                     "<video controls style='max-width: 35vh; border-radius:10px;' muted>" +
                         "<source src='" + message + "' type='video/mp4'>" +
                     "</video>";
             } else if (message.startsWith("/post-picture/")) {
-                contentHtml = 
+                contentHtml =
                     "<img src='" + message + "' style='max-width: 100%; max-height: 60vh; border-radius:10px;' />";
             } else {
                 contentHtml = message;
@@ -432,7 +441,7 @@ body {
             scrollToBottom();
         });
 
-        // scroll Down  
+        // scroll Down
         function scrollToBottom() {
             $('.chat-container').scrollTop($('.chat-container')[0].scrollHeight);
         }
